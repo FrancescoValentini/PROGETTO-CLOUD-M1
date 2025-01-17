@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class UserController {
 
-	@GetMapping
+
 	public ResponseEntity <Object> getUser() {
 		return new ResponseEntity<>( HttpStatus.OK);
 		
