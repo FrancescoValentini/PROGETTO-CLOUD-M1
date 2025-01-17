@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import io.jsonwebtoken.lang.Arrays;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
@@ -23,7 +24,7 @@ public class UserAccount implements UserDetails{
 	private String username;
 	private String email;
 	private String password;
-	@OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.EAGER)
 	private List<Folder> cartelle;
 	
 	public UserAccount() {}
