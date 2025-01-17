@@ -20,9 +20,9 @@ public class Folder {
 	private List<Note>notesList;
 	@ManyToOne
 	@JoinColumn(name = "utente_id", nullable = false)
-	private User utente;
+	private UserAccount utente;
 	
-	public Folder(String id , String folderName , Date creationTimeStamp,User utente) {
+	public Folder(String id , String folderName , Date creationTimeStamp,UserAccount utente) {
 		this.id = id;
 		this.folderName = folderName;
 		this.creationTimestamp = creationTimestamp;
