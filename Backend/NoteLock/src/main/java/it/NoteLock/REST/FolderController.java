@@ -21,7 +21,6 @@ import it.NoteLock.Exceptions.ResourceNotFoundException;
 import it.NoteLock.Models.Folder;
 import it.NoteLock.Models.UserAccount;
 import it.NoteLock.Repositories.FolderRepository;
-import jakarta.websocket.server.PathParam;
 
 /**
  * @author Giulia Balestra
@@ -33,6 +32,7 @@ public class FolderController {
 	
 	@Autowired
 	FolderRepository repoCartelle;
+	
 	@GetMapping
 	public ResponseEntity<Object> getAllFolders(){
 		return new ResponseEntity<>(repoCartelle.findAll(),HttpStatus.OK);
@@ -61,7 +61,7 @@ public class FolderController {
 		return new ResponseEntity<>("Folder name already in use",HttpStatus.CONFLICT);
 	}
 	
-	@PutMapping
+	@PutMapping("/{id}")
 	public ResponseEntity<Object> updateFolder(@PathVariable("id") String id,@AuthenticationPrincipal UserAccount utente,
 			@RequestBody FolderDTO folder){
 		if(repoCartelle.existsById(id)) {
@@ -74,8 +74,10 @@ public class FolderController {
 		throw new ResourceNotFoundException("Folder not found");
 	}
 	
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> deleteFolder(@PathVariable("id") String id){
+		// TODO RIVEDERE DELETE
 		if(repoCartelle.existsById(id)) {
 			repoCartelle.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.OK);
