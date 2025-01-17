@@ -1,17 +1,12 @@
 package it.NoteLock.Models;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 @Entity
 public class Note {
 	@Id
@@ -21,7 +16,7 @@ public class Note {
 	private String body;
 	@ManyToOne
 	@JoinColumn(name = "utente_id", nullable = false)
-	private User utente;
+	private UserAccount utente;
 	@ManyToOne
 	@JoinColumn(name = "cartella_id", nullable = false)
 	private Folder cartella;
@@ -29,7 +24,7 @@ public class Note {
 	EncryptionOptions  encrypted;
 	
 
-	public Note(String id, Date timestamp , String title , String body , User utente , Folder cartella) {
+	public Note(String id, Date timestamp , String title , String body , UserAccount utente , Folder cartella) {
 		this.id = id;
 		this.timestamp = timestamp;
 		this.title = title;
@@ -70,11 +65,11 @@ public class Note {
 	public void setBody(String body) {
 		this.body = body;
 	}
-	public User getUtente() {
+	public UserAccount getUtente() {
 		return utente;
 	}
 
-	public void setUtente(User utente) {
+	public void setUtente(UserAccount utente) {
 		this.utente = utente;
 	}
 

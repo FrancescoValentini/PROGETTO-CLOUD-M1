@@ -15,7 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity 
-public class User implements UserDetails{
+public class UserAccount implements UserDetails{
 	@Id
 	private String id;
 	private String nome;
@@ -26,7 +26,7 @@ public class User implements UserDetails{
 	@OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Folder> cartelle;
 	
-	public User(String id, String nome, String cognome ,String username, String email , String password) {
+	public UserAccount(String id, String nome, String cognome ,String username, String email , String password) {
 		this.id = id;
 		this.nome = nome;
 		this.cognome = cognome;
