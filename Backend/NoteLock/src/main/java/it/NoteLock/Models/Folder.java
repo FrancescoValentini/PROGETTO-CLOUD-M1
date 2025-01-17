@@ -31,6 +31,10 @@ public class Folder {
 		this.notesList = new ArrayList<>();
 		
 	}
+	
+	public Folder() {
+		
+	}
 
 	public String getId() {
 		return id;
