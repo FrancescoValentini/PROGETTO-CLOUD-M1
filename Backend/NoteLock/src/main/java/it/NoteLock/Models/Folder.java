@@ -1,16 +1,33 @@
 package it.NoteLock.Models;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+@Entity
 public class Folder {
+	@Id
 	private String id;
 	private String folderName;
 	private Date creationTimestamp;
+	@OneToMany(mappedBy = "cartella", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Note>notesList;
+	@ManyToOne
+	@JoinColumn(name = "utente_id", nullable = false)
+	private User utente;
 	
-	public Folder(String id , String folderName , Date creationTimeStamp) {
+	public Folder(String id , String folderName , Date creationTimeStamp,User utente) {
 		this.id = id;
 		this.folderName = folderName;
 		this.creationTimestamp = creationTimestamp;
+		this.utente = utente;
+		this.notesList = new ArrayList<>();
 		
 	}
 
