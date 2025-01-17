@@ -1,5 +1,7 @@
 package it.NoteLock.REST;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,8 +64,14 @@ public class AuthController {
 	
 	@PostMapping(value = "/register")
 	public ResponseEntity<Object> register(@RequestBody RegisterDTO utente){
-		// TODO implementare registrazione
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+		if(!repo.findByUsername(utente.getUsername()).isPresent()) {
+			String encodedPassword = argon2encoder.encodePassword(utente.getPassword());
+			UserAccount account = new UserAccount(UUID.randomUUID().toString() , utente.getNome(), utente.getCognome() , utente.getUsername() , utente.getEmail(), encodedPassword);
+			repo.save(account);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>("Username already in use",HttpStatus.CONFLICT);
 	}
 
 }
