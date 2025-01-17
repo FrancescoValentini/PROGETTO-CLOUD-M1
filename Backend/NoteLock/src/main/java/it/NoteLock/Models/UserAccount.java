@@ -26,6 +26,8 @@ public class UserAccount implements UserDetails{
 	@OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Folder> cartelle;
 	
+	public UserAccount() {}
+	
 	public UserAccount(String id, String nome, String cognome ,String username, String email , String password) {
 		this.id = id;
 		this.nome = nome;
