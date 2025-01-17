@@ -1,18 +1,42 @@
 package it.NoteLock.Models;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+@Entity
 public class Note {
+	@Id
 	private String id;
 	private Date timestamp;
 	private String title;
 	private String body;
+	@ManyToOne
+	@JoinColumn(name = "utente_id", nullable = false)
+	private User utente;
+	@ManyToOne
+	@JoinColumn(name = "cartella_id", nullable = false)
+	private Folder cartella;
+	@Enumerated(EnumType.STRING)
+	EncryptionOptions  encrypted;
 	
-	public Note(String id, Date timestamp , String title , String body) {
+
+	public Note(String id, Date timestamp , String title , String body , User utente , Folder cartella) {
 		this.id = id;
 		this.timestamp = timestamp;
 		this.title = title;
 		this.body = body;
+		this.utente= utente;
+		this.cartella = cartella;
+		
 	}
 
 	public String getId() {
@@ -45,5 +69,28 @@ public class Note {
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+	public User getUtente() {
+		return utente;
+	}
+
+	public void setUtente(User utente) {
+		this.utente = utente;
+	}
+
+	public Folder getCartella() {
+		return cartella;
+	}
+
+	public void setCartella(Folder cartella) {
+		this.cartella = cartella;
+	}
+
+	public EncryptionOptions getEncrypted() {
+		return encrypted;
+	}
+
+	public void setEncrypted(EncryptionOptions encrypted) {
+		this.encrypted = encrypted;
 	}
 }
