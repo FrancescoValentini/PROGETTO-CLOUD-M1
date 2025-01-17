@@ -33,7 +33,7 @@ Ogni classe, interfaccia, ... deve essere  realizzata all'interno del suo packag
 
 # Nomenclatura dei Branch Git
 
-**Suffisso**
+**Prefisso**
 - **feature/**: Per nuove funzionalità.
 - **bugfix/**: Per correzioni di bug.
 - **docs/**: Per preparare una nuova release.
