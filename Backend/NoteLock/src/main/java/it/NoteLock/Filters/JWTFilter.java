@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import it.NoteLock.Models.UserAccount;
@@ -18,6 +19,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@Component
 public class JWTFilter extends OncePerRequestFilter {
 
 	@Autowired
@@ -37,7 +39,7 @@ public class JWTFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response); 
             return;
         }else { // token presente, lo verifica
-        	String userID = (String) jwtTools.verifyToken(token.substring(7)).get("subj");
+        	String userID = jwtTools.verifyToken(token.substring(7)).get("sub").toString();
         	Authentication authContext = SecurityContextHolder.getContext().getAuthentication();
         	if(userID != null && authContext == null) {
             	UserAccount u = repo.findById(userID).get();
