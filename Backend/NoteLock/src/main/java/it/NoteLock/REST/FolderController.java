@@ -21,6 +21,7 @@ import it.NoteLock.Exceptions.ResourceNotFoundException;
 import it.NoteLock.Models.Folder;
 import it.NoteLock.Models.UserAccount;
 import it.NoteLock.Repositories.FolderRepository;
+import jakarta.transaction.Transactional;
 
 /**
  * @author Giulia Balestra
@@ -76,8 +77,8 @@ public class FolderController {
 	
 	
 	@DeleteMapping("/{id}")
+	@Transactional
 	public ResponseEntity<Object> deleteFolder(@PathVariable("id") String id){
-		// TODO RIVEDERE DELETE
 		if(repoCartelle.existsById(id)) {
 			repoCartelle.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.OK);
