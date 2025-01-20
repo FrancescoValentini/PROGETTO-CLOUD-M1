@@ -80,7 +80,7 @@ public class FolderController {
 	@Transactional
 	public ResponseEntity<Object> deleteFolder(@PathVariable("id") String id){
 		if(repoCartelle.existsById(id)) {
-			repoCartelle.deleteById(id);
+			repoCartelle.deleteFolderById(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		throw new ResourceNotFoundException("Folder not found");
