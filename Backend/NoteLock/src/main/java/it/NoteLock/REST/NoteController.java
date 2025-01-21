@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.NoteLock.DTO.FolderDTO;
 import it.NoteLock.DTO.NoteDTO;
 import it.NoteLock.Exceptions.ResourceNotFoundException;
 import it.NoteLock.Models.Folder;
