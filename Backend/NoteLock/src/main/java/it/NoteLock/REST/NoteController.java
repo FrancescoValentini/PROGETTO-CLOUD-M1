@@ -60,7 +60,7 @@ public class NoteController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> UpdateNote(@PathVariable("id") String id, @AuthenticationPrincipal UserAccount utente,
+	public ResponseEntity<Object> updateNote(@PathVariable("id") String id, @AuthenticationPrincipal UserAccount utente,
 			@RequestBody NoteDTO note) {
 		if (repoNote.existsById(id)) {
 			Note n = repoNote.findById(id).get();
@@ -76,9 +76,9 @@ public class NoteController {
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<Object> DeleteNote(@PathVariable("id") String id) {
+	public ResponseEntity<Object> deleteNote(@PathVariable("id") String id) {
 		if (repoNote.existsById(id)) {
-			repoNote.deleteById(id);
+			repoNote.deleteNoteById(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		throw new ResourceNotFoundException("Note not found");
