@@ -57,7 +57,7 @@ public class NoteController {
 					note.getBody(),
 					utente,
 					f, 
-          note.getEncrypted());
+					note.getEncrypted());
 			repoNote.save(n);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
@@ -68,10 +68,12 @@ public class NoteController {
 	public ResponseEntity<Object> updateNote(@PathVariable("id") String id, @AuthenticationPrincipal UserAccount utente,
 			@RequestBody NoteDTO note) {
 		if (repoNote.existsById(id)) {
+			Folder f = repoCartelle.findById(note.getFolderId()).get();
 			Note n = repoNote.findById(id).get();
 			n.setTitle(note.getSubject());
 			n.setBody(note.getBody());
 			n.setEncrypted(note.getEncrypted());
+			n.setCartella(f);
 			repoNote.save(n);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}

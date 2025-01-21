@@ -10,6 +10,6 @@ import it.NoteLock.Models.Note;
 public interface NoteRepository extends CrudRepository<Note, String>{
 
 	@Modifying
-	@Query("DELETE FROM NOTE n WHERE n.id = :id")
+	@Query("DELETE FROM Note n WHERE n.id = :id")
 	void deleteNoteById(@Param("id") String id);
 }
