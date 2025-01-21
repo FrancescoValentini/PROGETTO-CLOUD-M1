@@ -2,6 +2,8 @@ package it.NoteLock.Filters;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import it.NoteLock.Exceptions.GlobalExceptionHandler;
 import it.NoteLock.Models.UserAccount;
 import it.NoteLock.Repositories.UserRepository;
 import it.NoteLock.Utils.JWTTools;
@@ -21,6 +26,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JWTFilter extends OncePerRequestFilter {
+	
+    private static final Logger logger = LoggerFactory.getLogger(JWTFilter.class);
 
 	@Autowired
 	JWTTools jwtTools;
@@ -56,6 +63,7 @@ public class JWTFilter extends OncePerRequestFilter {
 		
 		filterChain.doFilter(request, response);
 	}
+	
 	
 	@Bean
 	public FilterRegistrationBean registration(JWTFilter filter) {
