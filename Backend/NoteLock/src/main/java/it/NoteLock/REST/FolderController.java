@@ -46,6 +46,13 @@ public class FolderController {
 		
 	}
 	
+	@GetMapping("/notes/{id}")
+	public ResponseEntity <Object> getNotesByFolderID(@PathVariable("id") String id) {
+		if(repoCartelle.existsById(id))
+			return new ResponseEntity<>(repoCartelle.findAllNotesByFolderId(id), HttpStatus.OK);
+		throw new ResourceNotFoundException("Folder not found.");
+	}
+	
 	@PostMapping
 	public ResponseEntity <Object> createFolder(
 			@AuthenticationPrincipal UserAccount utente,
