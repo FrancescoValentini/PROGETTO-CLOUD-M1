@@ -2,6 +2,8 @@ package it.NoteLock.REST;
 
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.NoteLock.DTO.LoginDTO;
 import it.NoteLock.DTO.RegisterDTO;
+import it.NoteLock.Exceptions.GlobalExceptionHandler;
 import it.NoteLock.Exceptions.InvalidCredentialsException;
 import it.NoteLock.Exceptions.UnauthorizedException;
 import it.NoteLock.Models.UserAccount;
@@ -30,6 +33,7 @@ import it.NoteLock.Utils.PasswordEncoder;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	@Autowired
 	UserRepository repo;
@@ -56,6 +60,7 @@ public class AuthController {
 		boolean validPassword = argon2encoder.verifyPassword(utente.getPassword(), account.getPassword());
 
 		if (account != null && validPassword) {
+			logger.info(utente.getUsername() + " Logged in.");
 			return new ResponseEntity<>(jwtUtils.signToken(account.getId()), HttpStatus.OK);
 		}
 		throw new InvalidCredentialsException("Invalid Credentials.");
@@ -68,6 +73,7 @@ public class AuthController {
 			UserAccount account = new UserAccount(UUID.randomUUID().toString(), utente.getNome(), utente.getCognome(),
 					utente.getUsername(), utente.getEmail(), encodedPassword);
 			repo.save(account);
+			logger.info(utente.getUsername() + " Registered.");
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>("Username already in use", HttpStatus.CONFLICT);
