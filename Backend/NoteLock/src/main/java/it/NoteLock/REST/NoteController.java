@@ -53,7 +53,7 @@ public class NoteController {
 			Folder f = repoCartelle.findById(note.getFolderId()).get();
 			String noteID = UUID.randomUUID().toString();
 			Note n = new Note(UUID.randomUUID().toString(), new Date(System.currentTimeMillis()), note.getSubject(),
-					note.getBody(), utente, f);
+					note.getBody(), utente, f, note.getEncrypted());
 			repoNote.save(n);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);

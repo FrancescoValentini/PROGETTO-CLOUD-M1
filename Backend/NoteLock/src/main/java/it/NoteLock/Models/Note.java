@@ -20,18 +20,20 @@ public class Note {
 	@ManyToOne
 	@JoinColumn(name = "cartella_id", nullable = false)
 	private Folder cartella;
+	
+	
 	@Enumerated(EnumType.STRING)
 	EncryptionOptions  encrypted;
 	
 
-	public Note(String id, Date timestamp , String title , String body , UserAccount utente , Folder cartella) {
+	public Note(String id, Date timestamp , String title , String body , UserAccount utente , Folder cartella, EncryptionOptions  encrypted) {
 		this.id = id;
 		this.timestamp = timestamp;
 		this.title = title;
 		this.body = body;
 		this.utente= utente;
 		this.cartella = cartella;
-		
+		this.encrypted = encrypted;
 	}
 	
 	public Note() {
