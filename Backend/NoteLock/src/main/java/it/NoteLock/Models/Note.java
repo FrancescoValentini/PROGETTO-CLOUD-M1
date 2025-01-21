@@ -33,6 +33,10 @@ public class Note {
 		this.cartella = cartella;
 		
 	}
+	
+	public Note() {
+		
+	}
 
 	public String getId() {
 		return id;
