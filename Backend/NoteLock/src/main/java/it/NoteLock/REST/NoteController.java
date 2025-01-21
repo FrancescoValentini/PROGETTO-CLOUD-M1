@@ -43,6 +43,7 @@ public class NoteController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Object> getNote(@PathVariable("id") String id) {
 		return new ResponseEntity<>(repoNote.findById(id), HttpStatus.OK);
+
 	}
 
 	@PostMapping
@@ -50,12 +51,17 @@ public class NoteController {
 		System.out.println(note.getFolderId());
 		if (repoCartelle.existsById(note.getFolderId())) {
 			Folder f = repoCartelle.findById(note.getFolderId()).get();
-			String noteID = UUID.randomUUID().toString();
-			Note n = new Note(UUID.randomUUID().toString(), new Date(System.currentTimeMillis()), note.getSubject(),
-					note.getBody(), utente, f, note.getEncrypted());
+			Note n = new Note(UUID.randomUUID().toString(),
+					new Date(System.currentTimeMillis()),
+					note.getSubject(),
+					note.getBody(),
+					utente,
+					f, 
+          note.getEncrypted());
 			repoNote.save(n);
+			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		throw new ResourceNotFoundException("Folder not found");
 	}
 
 	@PutMapping("/{id}")
@@ -67,10 +73,9 @@ public class NoteController {
 			n.setBody(note.getBody());
 			n.setEncrypted(note.getEncrypted());
 			repoNote.save(n);
-
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
-
+		throw new ResourceNotFoundException("Note not found");
 	}
 
 	@DeleteMapping("/{id}")
@@ -81,7 +86,5 @@ public class NoteController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		throw new ResourceNotFoundException("Note not found");
-
 	}
-
 }
