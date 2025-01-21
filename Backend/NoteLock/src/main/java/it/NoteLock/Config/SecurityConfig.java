@@ -42,11 +42,12 @@ public class SecurityConfig {
 	    
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 		
-		// Allow all requests without authentication (TEST only)
 		http.authorizeHttpRequests(req -> req
 				.requestMatchers("/auth/**").permitAll()
 				.requestMatchers("/h2-console/**").permitAll()
-				.requestMatchers("/**").permitAll()
+				.requestMatchers("/api/users/**").hasAnyAuthority("Admin")
+				.requestMatchers("/api/folders/**").hasAnyAuthority("Admin","Utente")
+				.requestMatchers("/api/notes/**").hasAnyAuthority("Admin","Utente")
 				.anyRequest().authenticated()
 				);
 		

@@ -25,6 +25,7 @@ import it.NoteLock.Utils.PasswordEncoder;
  * AUTHENTICATION REST CONTROLLER
  * 
  * @author Francesco Valentini
+ * @author Giulia Balestra
  */
 @RestController
 @RequestMapping("/auth")
