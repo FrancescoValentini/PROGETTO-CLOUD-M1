@@ -27,6 +27,8 @@ public class UserAccount implements UserDetails{
 	@OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.EAGER)
 	private List<Folder> cartelle;
 	
+	private List<SimpleGrantedAuthority> privileges;
+	
 	public UserAccount() {}
 	
 	public UserAccount(String id, String nome, String cognome ,String username, String email , String password) {
@@ -37,6 +39,20 @@ public class UserAccount implements UserDetails{
 		this.email = email;
 		this.password = password;
 		this.cartelle = new ArrayList<>();
+		this.privileges = new ArrayList<>();
+		this.privileges.add(new SimpleGrantedAuthority("Utente"));
+	}
+	
+	public UserAccount(String id, String nome, String cognome ,String username, String email , String password, SimpleGrantedAuthority role) {
+		this.id = id;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.cartelle = new ArrayList<>();
+		this.privileges = new ArrayList<>();
+		this.privileges.add(role);
 	}
 	
 	public List<Folder> getCartelle() {
@@ -93,14 +109,20 @@ public class UserAccount implements UserDetails{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-	    return Arrays.asList(new SimpleGrantedAuthority[] { new SimpleGrantedAuthority("Utente") });
+	    return this.privileges;
 	}
+	
+	
 
 
 	@Override
 	public String getUsername() {
 		
 		return username;
+	}
+
+	public void setPrivileges(List<SimpleGrantedAuthority> privileges) {
+		this.privileges = privileges;
 	}
 	
 }
