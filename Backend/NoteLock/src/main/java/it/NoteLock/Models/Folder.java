@@ -26,7 +26,7 @@ public class Folder {
 	public Folder(String id , String folderName , Date creationTimeStamp,UserAccount utente) {
 		this.id = id;
 		this.folderName = folderName;
-		this.creationTimestamp = creationTimestamp;
+		this.creationTimestamp = creationTimeStamp;
 		this.utente = utente;
 		this.notesList = new ArrayList<>();
 		

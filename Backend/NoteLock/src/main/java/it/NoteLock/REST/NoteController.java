@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.NoteLock.DTO.FolderDTO;
 import it.NoteLock.DTO.NoteDTO;
 import it.NoteLock.Exceptions.ResourceNotFoundException;
 import it.NoteLock.Models.Folder;
@@ -57,7 +56,8 @@ public class NoteController {
 					note.getSubject(),
 					note.getBody(),
 					utente,
-					f);
+					f, 
+          note.getEncrypted());
 			repoNote.save(n);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
@@ -65,7 +65,7 @@ public class NoteController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> UpdateNote(@PathVariable("id") String id, @AuthenticationPrincipal UserAccount utente,
+	public ResponseEntity<Object> updateNote(@PathVariable("id") String id, @AuthenticationPrincipal UserAccount utente,
 			@RequestBody NoteDTO note) {
 		if (repoNote.existsById(id)) {
 			Note n = repoNote.findById(id).get();
@@ -80,9 +80,9 @@ public class NoteController {
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<Object> DeleteNote(@PathVariable("id") String id) {
+	public ResponseEntity<Object> deleteNote(@PathVariable("id") String id) {
 		if (repoNote.existsById(id)) {
-			repoNote.deleteById(id);
+			repoNote.deleteNoteById(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		throw new ResourceNotFoundException("Note not found");
