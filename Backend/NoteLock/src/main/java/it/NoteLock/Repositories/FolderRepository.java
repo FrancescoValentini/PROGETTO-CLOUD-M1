@@ -29,4 +29,7 @@ public interface FolderRepository extends CrudRepository<Folder, String>{
 
 	@Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END FROM Folder f WHERE f.id = :folderID AND f.utente.id = :userID")
 	boolean isFolderOwnedByUser(@Param("userID") String userID, @Param("folderID") String folderID);
+	
+	@Query("SELECT f FROM Folder f WHERE f.utente.id = :userID AND f.folderName = :folderName")
+	Optional<Folder> findUserByfolderName(@Param("userID") String userID, @Param("folderName") String folderName);
 }
