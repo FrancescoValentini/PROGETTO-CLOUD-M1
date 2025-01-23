@@ -35,22 +35,27 @@ public class NoteController {
 	FolderRepository repoCartelle;
 
 	@GetMapping
-	public ResponseEntity<Object> getAllNote() {
-		return new ResponseEntity<>(repoNote.findAll(), HttpStatus.OK);
+	public ResponseEntity<Object> getAllNote(@AuthenticationPrincipal UserAccount utente) {
+		return new ResponseEntity<>(repoNote.getUserNotes(utente.getId()), HttpStatus.OK);
 
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Object> getNote(@PathVariable("id") String id) {
-		return new ResponseEntity<>(repoNote.findById(id), HttpStatus.OK);
+	public ResponseEntity<Object> getNote(@AuthenticationPrincipal UserAccount utente, @PathVariable("id") String id) {
+	
+		if(repoNote.isNoteOwnedByUser(utente.getId(), id)) {
+			return new ResponseEntity<>(repoNote.findNoteByUser(utente.getId(), id), HttpStatus.OK);
+		}
+		
+		throw new ResourceNotFoundException("Note not found");
 
 	}
 
 	@PostMapping
 	public ResponseEntity<Object> createNote(@AuthenticationPrincipal UserAccount utente, @RequestBody NoteDTO note) {
 		System.out.println(note.getFolderId());
-		if (repoCartelle.existsById(note.getFolderId())) {
-			Folder f = repoCartelle.findById(note.getFolderId()).get();
+		if (repoCartelle.isFolderOwnedByUser(utente.getId(),note.getFolderId())) {
+			Folder f = repoCartelle.findFolderByUser(utente.getId(),note.getFolderId()).get();
 			Note n = new Note(UUID.randomUUID().toString(),
 					new Date(System.currentTimeMillis()),
 					note.getSubject(),
@@ -67,9 +72,9 @@ public class NoteController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> updateNote(@PathVariable("id") String id, @AuthenticationPrincipal UserAccount utente,
 			@RequestBody NoteDTO note) {
-		if (repoNote.existsById(id)) {
-			Folder f = repoCartelle.findById(note.getFolderId()).get();
-			Note n = repoNote.findById(id).get();
+		if (repoNote.isNoteOwnedByUser(utente.getId(), id)) {
+			Folder f = repoCartelle.findFolderByUser(utente.getId(),note.getFolderId()).get();
+			Note n = repoNote.findNoteByUser(utente.getId(), id).get();
 			n.setTitle(note.getSubject());
 			n.setBody(note.getBody());
 			n.setEncrypted(note.getEncrypted());
@@ -82,8 +87,9 @@ public class NoteController {
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<Object> deleteNote(@PathVariable("id") String id) {
-		if (repoNote.existsById(id)) {
+	public ResponseEntity<Object> deleteNote(@AuthenticationPrincipal UserAccount utente, @PathVariable("id") String id) {
+		System.out.println(repoNote.isNoteOwnedByUser(utente.getId(), id));
+		if (repoNote.isNoteOwnedByUser(utente.getId(), id)) {
 			repoNote.deleteNoteById(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}

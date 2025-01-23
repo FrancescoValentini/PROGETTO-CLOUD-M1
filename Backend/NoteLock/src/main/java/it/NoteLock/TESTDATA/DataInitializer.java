@@ -48,7 +48,7 @@ public class DataInitializer implements CommandLineRunner  {
 		UserAccount user2 = new UserAccount("7527e5fb-b597-48ef-b3fd-f1ba129e98b2", "User_Nome", "User_Cognome", "user", "user@gmail.com", password2);
 		
 		Folder f = new Folder("02464980-2f22-4bf1-b01e-d0ce143528fb","Prova-admin-1",new Date(System.currentTimeMillis()),user1);
-		Folder f1 = new Folder("1bc24a4c-f13d-42d4-a190-886ef238baa4 ","Prova-user-1",new Date(System.currentTimeMillis()),user2);
+		Folder f1 = new Folder("1bc24a4c-f13d-42d4-a190-886ef238baa4","Prova-user-1",new Date(System.currentTimeMillis()),user2);
 		
 		Note n = new Note("219132f3-06c5-41cb-8807-13126dbfa1ca",
 				new Date(System.currentTimeMillis()),
