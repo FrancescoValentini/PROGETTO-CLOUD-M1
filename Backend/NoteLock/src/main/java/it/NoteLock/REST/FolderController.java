@@ -22,6 +22,7 @@ import it.NoteLock.Models.Folder;
 import it.NoteLock.Models.UserAccount;
 import it.NoteLock.Repositories.FolderRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 /**
  * @author Giulia Balestra
@@ -58,7 +59,7 @@ public class FolderController {
 	@PostMapping
 	public ResponseEntity <Object> createFolder(
 			@AuthenticationPrincipal UserAccount utente,
-			@RequestBody FolderDTO folder){
+			@Valid @RequestBody FolderDTO folder){
 		if(!repoCartelle.findUserByfolderName(utente.getId(),folder.getFolderName()).isPresent()) {
 			Folder f = new Folder(
 					UUID.randomUUID().toString(),
@@ -73,7 +74,7 @@ public class FolderController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> updateFolder(@PathVariable("id") String id,@AuthenticationPrincipal UserAccount utente,
-			@RequestBody FolderDTO folder){
+			@Valid @RequestBody FolderDTO folder){
 		if(repoCartelle.isFolderOwnedByUser(utente.getId(),id)) {
 			Folder f = repoCartelle.findFolderByUser(utente.getId(),id).get();
 			f.setFolderName(folder.getFolderName());

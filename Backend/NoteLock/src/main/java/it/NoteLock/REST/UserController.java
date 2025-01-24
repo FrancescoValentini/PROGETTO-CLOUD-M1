@@ -2,7 +2,6 @@ package it.NoteLock.REST;
 
 import java.util.UUID;
 
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.NoteLock.DTO.AdvancedUserDTO;
-import it.NoteLock.Exceptions.GlobalExceptionHandler;
 import it.NoteLock.Exceptions.ResourceNotFoundException;
 import it.NoteLock.Models.UserAccount;
 import it.NoteLock.Repositories.UserRepository;
 import it.NoteLock.Utils.PasswordEncoder;
+import jakarta.validation.Valid;
 
 /**
  * @author Giulia Balestra
@@ -56,7 +55,7 @@ public class UserController {
 	@PostMapping("/{userRole}")
 	public ResponseEntity <Object> createUser(
 			@AuthenticationPrincipal UserAccount admin,
-			@RequestBody AdvancedUserDTO utente,
+			@Valid @RequestBody AdvancedUserDTO utente,
 			@PathVariable("userRole") String role){
 		if (!repoUtenti.findByUsername(utente.getUsername()).isPresent()) {
 			String encodedPassword = argon2encoder.encodePassword(utente.getPassword());
@@ -76,7 +75,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> updateUser(@RequestBody AdvancedUserDTO utente){
+	public ResponseEntity<Object> updateUser(@Valid @RequestBody AdvancedUserDTO utente){
 		if(repoUtenti.findByUsername(utente.getUsername()).isPresent()) {
 			UserAccount u = repoUtenti.findByUsername(utente.getUsername()).get();
 			u.setNome(utente.getNome());

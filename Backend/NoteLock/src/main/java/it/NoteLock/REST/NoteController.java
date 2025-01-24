@@ -24,6 +24,7 @@ import it.NoteLock.Models.UserAccount;
 import it.NoteLock.Repositories.FolderRepository;
 import it.NoteLock.Repositories.NoteRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/notes")
@@ -52,7 +53,7 @@ public class NoteController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> createNote(@AuthenticationPrincipal UserAccount utente, @RequestBody NoteDTO note) {
+	public ResponseEntity<Object> createNote(@AuthenticationPrincipal UserAccount utente, @Valid  @RequestBody NoteDTO note) {
 		System.out.println(note.getFolderId());
 		if (repoCartelle.isFolderOwnedByUser(utente.getId(),note.getFolderId())) {
 			Folder f = repoCartelle.findFolderByUser(utente.getId(),note.getFolderId()).get();
@@ -71,7 +72,7 @@ public class NoteController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> updateNote(@PathVariable("id") String id, @AuthenticationPrincipal UserAccount utente,
-			@RequestBody NoteDTO note) {
+			@Valid @RequestBody NoteDTO note) {
 		if (repoNote.isNoteOwnedByUser(utente.getId(), id)) {
 			Folder f = repoCartelle.findFolderByUser(utente.getId(),note.getFolderId()).get();
 			Note n = repoNote.findNoteByUser(utente.getId(), id).get();

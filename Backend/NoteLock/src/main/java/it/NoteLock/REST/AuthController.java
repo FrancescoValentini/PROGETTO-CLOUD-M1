@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.NoteLock.DTO.LoginDTO;
 import it.NoteLock.DTO.RegisterDTO;
-import it.NoteLock.Exceptions.GlobalExceptionHandler;
 import it.NoteLock.Exceptions.InvalidCredentialsException;
 import it.NoteLock.Exceptions.UnauthorizedException;
 import it.NoteLock.Models.UserAccount;
