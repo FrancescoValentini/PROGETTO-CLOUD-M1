@@ -1,11 +1,18 @@
 package it.NoteLock.Exceptions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.IncorrectClaimException;
@@ -49,6 +56,21 @@ public class GlobalExceptionHandler {
 		logger.warn("InvalidCredentialsException: {}",ex.getMessage());
 		return new ResponseEntity<>(ex.getMessage(),HttpStatus.UNAUTHORIZED);
 	}
+	
+	// VALIDAZIONE DATI
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errorMessages = new HashMap<>();
+
+        BindingResult result = ex.getBindingResult();
+        for (FieldError fieldError : result.getFieldErrors()) {
+            errorMessages.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+
+        return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
+    }
 	
 	// JWT
     @ExceptionHandler(ExpiredJwtException.class)

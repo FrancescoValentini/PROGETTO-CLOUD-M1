@@ -1,11 +1,30 @@
 package it.NoteLock.DTO;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public class AdvancedUserDTO {
+    @NotBlank(message = "Nome è obbligatorio")
+    @Size(max = 50, message = "Il nome non può superare i 50 caratteri")
+    @Pattern(regexp = "^[A-Za-zàèéìòùùA-ÿ]+$", message = "Il nome può contenere solo lettere")
 	private String nome;
+    
+    @NotBlank(message = "Cognome è obbligatorio")
+    @Size(max = 50, message = "Il cognome non può superare i 50 caratteri")
+    @Pattern(regexp = "^[A-Za-zàèéìòùùA-ÿ]+$", message = "Il cognome può contenere solo lettere")
 	private String cognome;
-	private String username;
+    
+    @NotBlank(message = "L'email è obbligatoria")
+    @Email(message = "Email non valida")
 	private String email;
+    
+    @NotBlank(message = "Username obbligatorio")
+    @Pattern(regexp = "^[A-Za-z0-9-_\\.]+$", message = "Username può contenere solo lettere, numeri, e i simboli - _ .")
+	private String username;
+    
+    @NotBlank(message = "Password obbligatoria")
 	private String password;
 	
 	public AdvancedUserDTO(String nome, String cognome, String username, String email, String password) {
