@@ -59,4 +59,6 @@ public class Folder {
 	public void setCreationTimestamp(Date creationTimestamp) {
 		this.creationTimestamp = creationTimestamp;
 	}
+	
+	public boolean hasNotes() {return notesList.isEmpty();}
 }

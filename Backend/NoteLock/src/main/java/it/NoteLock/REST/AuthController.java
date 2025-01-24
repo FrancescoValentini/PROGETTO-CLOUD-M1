@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.NoteLock.DTO.LoginDTO;
 import it.NoteLock.DTO.RegisterDTO;
-import it.NoteLock.Exceptions.GlobalExceptionHandler;
 import it.NoteLock.Exceptions.InvalidCredentialsException;
 import it.NoteLock.Exceptions.UnauthorizedException;
 import it.NoteLock.Models.UserAccount;
 import it.NoteLock.Repositories.UserRepository;
 import it.NoteLock.Utils.JWTTools;
 import it.NoteLock.Utils.PasswordEncoder;
+import jakarta.validation.Valid;
 
 /**
  * AUTHENTICATION REST CONTROLLER
@@ -54,7 +54,7 @@ public class AuthController {
 	}
 
 	@PostMapping(value = "/login")
-	public ResponseEntity<Object> login(@RequestBody LoginDTO utente) {
+	public ResponseEntity<Object> login(@Valid @RequestBody LoginDTO utente) {
 		UserAccount account = repo.findByUsername(utente.getUsername()).get();
 
 		boolean validPassword = argon2encoder.verifyPassword(utente.getPassword(), account.getPassword());
@@ -67,7 +67,7 @@ public class AuthController {
 	}
 
 	@PostMapping(value = "/register")
-	public ResponseEntity<Object> register(@RequestBody RegisterDTO utente) {
+	public ResponseEntity<Object> register(@Valid @RequestBody RegisterDTO utente) {
 		if (!repo.findByUsername(utente.getUsername()).isPresent()) {
 			String encodedPassword = argon2encoder.encodePassword(utente.getPassword());
 			UserAccount account = new UserAccount(UUID.randomUUID().toString(), utente.getNome(), utente.getCognome(),

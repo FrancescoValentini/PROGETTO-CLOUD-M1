@@ -1,6 +1,9 @@
 package it.NoteLock.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class FolderDTO {
+    @NotBlank(message = "Nome della cartella obbligatorio")
 	private String folderName;
 
 	public FolderDTO(String folderName) {

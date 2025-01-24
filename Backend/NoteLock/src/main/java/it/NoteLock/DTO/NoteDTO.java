@@ -1,11 +1,18 @@
 package it.NoteLock.DTO;
 
 import it.NoteLock.Models.EncryptionOptions;
+import jakarta.validation.constraints.NotBlank;
 
 public class NoteDTO {
+	
+	@NotBlank(message = "Titolo della nota obbligatorio")
 	private String subject;
 	private String body;
+	
+	@NotBlank(message = "Identificativo della cartella obbligatorio")
 	private String folderId;
+	
+	@NotBlank(message = "Opzioni di cifratura obbligatorie")
 	private EncryptionOptions encrypted;
 
 	public NoteDTO() {

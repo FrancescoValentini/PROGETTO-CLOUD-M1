@@ -1,7 +1,14 @@
 package it.NoteLock.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 public class LoginDTO {
+    @NotBlank(message = "Username obbligatorio")
+    @Pattern(regexp = "^[A-Za-z0-9-_\\.]+$", message = "Username può contenere solo lettere, numeri, e i simboli - _ .")
 	private String username;
+    
+    @NotBlank(message = "Password obbligatoria")
 	private String password;
 	
 	

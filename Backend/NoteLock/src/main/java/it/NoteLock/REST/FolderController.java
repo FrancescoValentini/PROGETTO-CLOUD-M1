@@ -22,6 +22,7 @@ import it.NoteLock.Models.Folder;
 import it.NoteLock.Models.UserAccount;
 import it.NoteLock.Repositories.FolderRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 /**
  * @author Giulia Balestra
@@ -35,20 +36,22 @@ public class FolderController {
 	FolderRepository repoCartelle;
 	
 	@GetMapping
-	public ResponseEntity<Object> getAllFolders(){
-		return new ResponseEntity<>(repoCartelle.findAll(),HttpStatus.OK);
+	public ResponseEntity<Object> getAllFolders(@AuthenticationPrincipal UserAccount utente){
+		return new ResponseEntity<>(repoCartelle.getUserFolders(utente.getId()),HttpStatus.OK);
 
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity <Object> getFolder(@PathVariable("id") String id) {
-		return new ResponseEntity<>(repoCartelle.findById(id), HttpStatus.OK);
+	public ResponseEntity <Object> getFolder(@AuthenticationPrincipal UserAccount utente,@PathVariable("id") String id) {
+		if(repoCartelle.isFolderOwnedByUser(utente.getId(),id))
+			return new ResponseEntity<>(repoCartelle.findFolderByUser(utente.getId(), id), HttpStatus.OK);
 		
+		throw new ResourceNotFoundException("Folder not found");
 	}
 	
 	@GetMapping("/notes/{id}")
-	public ResponseEntity <Object> getNotesByFolderID(@PathVariable("id") String id) {
-		if(repoCartelle.existsById(id))
+	public ResponseEntity <Object> getNotesByFolderID(@AuthenticationPrincipal UserAccount utente, @PathVariable("id") String id) {
+		if(repoCartelle.isFolderOwnedByUser(utente.getId(),id))
 			return new ResponseEntity<>(repoCartelle.findAllNotesByFolderId(id), HttpStatus.OK);
 		throw new ResourceNotFoundException("Folder not found.");
 	}
@@ -56,8 +59,8 @@ public class FolderController {
 	@PostMapping
 	public ResponseEntity <Object> createFolder(
 			@AuthenticationPrincipal UserAccount utente,
-			@RequestBody FolderDTO folder){
-		if(!repoCartelle.findByfolderName(folder.getFolderName()).isPresent()) {
+			@Valid @RequestBody FolderDTO folder){
+		if(!repoCartelle.findUserByfolderName(utente.getId(),folder.getFolderName()).isPresent()) {
 			Folder f = new Folder(
 					UUID.randomUUID().toString(),
 					folder.getFolderName(),
@@ -71,9 +74,9 @@ public class FolderController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> updateFolder(@PathVariable("id") String id,@AuthenticationPrincipal UserAccount utente,
-			@RequestBody FolderDTO folder){
-		if(repoCartelle.existsById(id)) {
-			Folder f = repoCartelle.findById(id).get();
+			@Valid @RequestBody FolderDTO folder){
+		if(repoCartelle.isFolderOwnedByUser(utente.getId(),id)) {
+			Folder f = repoCartelle.findFolderByUser(utente.getId(),id).get();
 			f.setFolderName(folder.getFolderName());
 			repoCartelle.save(f);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -85,10 +88,15 @@ public class FolderController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<Object> deleteFolder(@PathVariable("id") String id){
-		if(repoCartelle.existsById(id)) {
-			repoCartelle.deleteFolderById(id);
-			return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<Object> deleteFolder(@AuthenticationPrincipal UserAccount utente, @PathVariable("id") String id){
+		if(repoCartelle.isFolderOwnedByUser(utente.getId(),id)) {
+			Folder f = repoCartelle.findFolderByUser(utente.getId(),id).get();
+			if(!f.hasNotes()) {
+				repoCartelle.deleteFolderById(id);
+				return new ResponseEntity<>(HttpStatus.OK);
+			}else {
+				return new ResponseEntity<>("Folder is not empty.",HttpStatus.BAD_REQUEST);
+			}
 		}
 		throw new ResourceNotFoundException("Folder not found");
 	}
