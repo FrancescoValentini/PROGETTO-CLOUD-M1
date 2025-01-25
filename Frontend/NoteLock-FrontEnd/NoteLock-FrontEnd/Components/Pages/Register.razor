@@ -31,16 +31,24 @@
 
 <button @onclick="MethodRegister" class="btn btn-primary">Register</button>
 
-@counter
+
 @code {
+    private AuthController backend;
     private string email;
     private string password;
     private string username;
     private string name;
     private string surname;
-    private int counter;
     private void MethodRegister()
     {
-        counter++;
+        backend = new AuthController("http://127.0.0.1:8080/auth/register");
+        RegisterDTO r = new RegisterDTO();
+        r.email = email;
+        r.password = password;
+        r.username = username;
+        r.nome = name;
+        r.cognome = surname;
+        backend.Register(r);
     }
+
 }

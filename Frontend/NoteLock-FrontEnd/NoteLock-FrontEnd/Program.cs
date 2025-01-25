@@ -1,4 +1,5 @@
 using NoteLock_FrontEnd.Components;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddScoped<ICookie, CookieUtil>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
