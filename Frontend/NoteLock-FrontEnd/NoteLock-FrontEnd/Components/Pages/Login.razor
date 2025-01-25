@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@inject ICookie cookie
 @rendermode InteractiveServer
 <h1>Login</h1>
 
@@ -17,11 +18,19 @@
 
 
 @code {
+    private AuthController backend;
     private string username;
     private string password;
 
     private void MethodLogin()
     {
-        throw new Exception();
+        backend = new AuthController("http://127.0.0.1:8080/auth/login");
+        LoginDTO l = new LoginDTO();
+        l.username = username;
+        l.password = password;
+        String token = backend.Login(l);
+        cookie.SetValue("token", token, 30);
     }
 }
+
+
