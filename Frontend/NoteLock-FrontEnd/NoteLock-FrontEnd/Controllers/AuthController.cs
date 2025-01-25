@@ -18,11 +18,22 @@ public class AuthController
 
     public String Login(LoginDTO l)
     {
+        return PerformPOSTrequest(l);
+
+    }
+
+    public String Register(RegisterDTO r)
+    {
+        return PerformPOSTrequest(r);
+    }
+
+    private String PerformPOSTrequest(object ?data)
+    {
         using (HttpClient client = new HttpClient())
         {
             try
             {
-                string json = JsonConvert.SerializeObject(l);
+                string json = JsonConvert.SerializeObject(data);
                 HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = client.PostAsync(BaseUrl, content).Result;
@@ -38,7 +49,6 @@ public class AuthController
                 return null;
             }
         }
-      
     }
 
 }
