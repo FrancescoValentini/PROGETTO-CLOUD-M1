@@ -1,10 +1,11 @@
 ﻿@page "/login"
-@inject ICookie cookie
 @rendermode InteractiveServer
+@inject ICookie cookie
+
 <h1>Login</h1>
 
 
-<form>
+
     <div class="mb-3">
         <label for="inputUsername" class="form-label">Username</label>
         <input type="text" @bind="@username" class="form-control" id="inputUsername">
@@ -14,7 +15,6 @@
         <input type="password" @bind="@password" class="form-control" id="inputPassword">
     </div>
     <button class="btn btn-primary" @onclick="MethodLogin">Login</button>
-</form>
 
 
 @code {
@@ -22,14 +22,16 @@
     private string username;
     private string password;
 
-    private void MethodLogin()
+    private async Task MethodLogin()
     {
         backend = new AuthController("http://127.0.0.1:8080/auth/login");
         LoginDTO l = new LoginDTO();
         l.username = username;
         l.password = password;
         String token = backend.Login(l);
+  
         cookie.SetValue("token", token, 30);
+
     }
 }
 

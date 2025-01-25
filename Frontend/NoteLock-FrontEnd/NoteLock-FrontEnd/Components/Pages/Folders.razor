@@ -1,5 +1,7 @@
 ﻿@page "/folders"
 @rendermode InteractiveServer
+@inject ICookie cookie
+@inject NavigationManager Navigation
 <h1>Folders</h1>
 
 
@@ -12,13 +14,8 @@
         </tr>
     </thead>
     <tbody>
-        
-            @{
-                String token = "test-token";
-                FolderController backend = new FolderController("http://127.0.0.1:8080/api/folders",token);
-                List<FolderDTO> folders = backend.GetFolders();
-
-                foreach(FolderDTO folder in folders){
+        @{
+            foreach(FolderDTO folder in folders){
                 <tr>
                     <td>@folder.folderName</td>
                     <td>@folder.creationTimestamp</td>
@@ -27,15 +24,39 @@
                         <button type="button" class="btn btn-outline-primary">DELETE</button>
                     </td>
                 </tr>
-                }
             }
-        
+        }
     </tbody>
 </table>
 
 
 @code {
+    private List<FolderDTO> folders = new List<FolderDTO>();
+    private string token;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            token = await cookie.GetValue("token");
+            if (string.IsNullOrEmpty(token))
+            {
+                // Redirect a login se il token non è presente
+                Navigation.NavigateTo("/login");
+            }
+            else
+            {
+                folders = await getFolders();
+                StateHasChanged(); // Aggiorna la Ui dopo il caricamento dei dati
+            }
+        }
+    }
 
+    private async Task<List<FolderDTO>> getFolders()
+    {
+        
+        FolderController backend = new FolderController("http://127.0.0.1:8080/api/folders", token);
+        return backend.GetFolders();
+    }
 }
 
 
