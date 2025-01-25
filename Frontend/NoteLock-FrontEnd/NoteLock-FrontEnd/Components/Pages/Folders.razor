@@ -12,14 +12,24 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>Scuola</td>
-            <td>25-01-2025 17:27</td>
-            <td>
-                <button type="button" class="btn btn-outline-primary">EDIT</button>
-                <button type="button" class="btn btn-outline-primary">DELETE</button>
-            </td>
-        </tr>
+        
+            @{
+                String token = "test-token";
+                FolderController backend = new FolderController("http://127.0.0.1:8080/api/folders",token);
+                List<FolderDTO> folders = backend.GetFolders();
+
+                foreach(FolderDTO folder in folders){
+                <tr>
+                    <td>@folder.folderName</td>
+                    <td>@folder.creationTimestamp</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary">EDIT</button>
+                        <button type="button" class="btn btn-outline-primary">DELETE</button>
+                    </td>
+                </tr>
+                }
+            }
+        
     </tbody>
 </table>
 
