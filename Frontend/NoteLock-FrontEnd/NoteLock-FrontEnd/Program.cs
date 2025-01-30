@@ -5,7 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents()
+    .AddInteractiveWebAssemblyComponents(); // <--- Aggiunto il supporto WASM
 
 builder.Services.AddScoped<ICookie, CookieUtil>();
 var app = builder.Build();
@@ -20,6 +21,8 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+    .AddInteractiveServerRenderMode()
+    .AddInteractiveWebAssemblyRenderMode(); // <--- Aggiunto WebAssembly Render Mode
+
 
 app.Run();

@@ -7,29 +7,34 @@
 
 
 <div class="form-row">
-    <div class="form-group col-md-6">
-        <label for="inputEmail4">Email</label>
-        <input type="email" @bind="@email" class="form-control" id="inputEmail4">
+
+    <div class="form-group">
+        <label for="inputUsername">Username</label>
+        <input type="text" @bind="@username" class="form-control" id="inputUsername">
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group mb-3">
         <label for="inputPassword4">Password</label>
         <input type="password" @bind="@password" class="form-control" id="inputPassword4">
     </div>
-</div>
-<div class="form-group">
-    <label for="inputUsername">Username</label>
-    <input type="text" @bind="@username" class="form-control" id="inputUsername">
-</div>
-<div class="form-group">
-    <label for="inputName">Name</label>
-    <input type="text" @bind="@name" class="form-control" id="inputName">
-</div>
-<div class="form-group">
-    <label for="inputSurname">Surname</label>
-    <input type="text" @bind="@surname" class="form-control" id="inputSurname">
+    <div class="form-group mb-3">
+        <label for="inputEmail4">Email</label>
+        <input type="email" @bind="@email" class="form-control" id="inputEmail4">
+    </div>
+    <div class="form-group">
+        <label for="inputName">Name</label>
+        <input type="text" @bind="@name" class="form-control" id="inputName">
+    </div>
+    <div class="form-group  mb-3">
+        <label for="inputSurname">Surname</label>
+        <input type="text" @bind="@surname" class="form-control" id="inputSurname">
+    </div>
+    <div class="form-group  mb-3">
+        <button @onclick="MethodRegister" class="btn btn-primary">Register</button>
+    </div>
 </div>
 
-<button @onclick="MethodRegister" class="btn btn-primary">Register</button>
+
+
 
 
 @code {
