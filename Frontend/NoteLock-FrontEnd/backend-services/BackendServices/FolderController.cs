@@ -23,6 +23,23 @@ namespace backend_services.BackendServices
             return JsonConvert.DeserializeObject<List<FolderDTO>>(json);
         }
 
+        public String AddFolder(FolderDTO folder) {
+            string result = HTTPUtils.POST(folder, authToken, this.BaseUrl);
+            return result;
+        }
+
+        public String UpdateFolder(FolderDTO folder, String id) {
+            string tmpUrl = this.BaseUrl + "/" + id;
+            string result = HTTPUtils.PUT(folder, authToken, this.BaseUrl);
+            return result;
+        }
+
+        public void DeleteFolder(String id) {
+            string tmpUrl = this.BaseUrl + "/" + id;
+
+            HTTPUtils.DELETE(authToken, tmpUrl);
+        }
+
 
     }
 }
