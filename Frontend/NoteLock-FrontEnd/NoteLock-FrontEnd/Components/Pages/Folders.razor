@@ -55,7 +55,7 @@
     private async Task<List<FolderDTO>> getFolders()
     {
         
-        FolderController backend = new FolderController("http://127.0.0.1:8080/api/folders", token);
+        FolderControllers backend = new FolderController("http://127.0.0.1:8080/api/folders", token);
         return backend.GetFolders();
     }
 }
