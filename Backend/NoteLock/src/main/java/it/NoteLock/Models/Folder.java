@@ -60,5 +60,5 @@ public class Folder {
 		this.creationTimestamp = creationTimestamp;
 	}
 	
-	public boolean hasNotes() {return notesList.isEmpty();}
+	public boolean hasNotes() {return !notesList.isEmpty();}
 }
