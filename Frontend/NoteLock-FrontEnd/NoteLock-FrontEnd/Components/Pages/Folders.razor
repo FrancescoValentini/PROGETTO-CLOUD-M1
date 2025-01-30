@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject ICookie cookie
 @inject NavigationManager Navigation
+@using backend_services.BackendServices;
 <h1>Folders</h1>
 
 <button type="button" class="btn btn-outline-success"><i class="bi bi-plus-square"></i></button>
@@ -55,7 +56,7 @@
     private async Task<List<FolderDTO>> getFolders()
     {
         
-        FolderControllers backend = new FolderController("http://127.0.0.1:8080/api/folders", token);
+        FolderController backend = new FolderController("http://127.0.0.1:8080/api/folders", token);
         return backend.GetFolders();
     }
 }

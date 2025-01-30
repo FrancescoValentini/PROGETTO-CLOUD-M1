@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace backend_services.HTTPUtils {
+namespace backend_services.HTTP {
     public class HTTPUtils {
         public static String GET(String authToken, String BaseUrl) {
             using (HttpClient client = new HttpClient()) {
