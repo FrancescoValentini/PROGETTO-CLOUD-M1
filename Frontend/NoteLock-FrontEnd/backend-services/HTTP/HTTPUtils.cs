@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace backend_services.HTTPUtils {
+namespace backend_services.HTTP {
     public class HTTPUtils {
         public static String GET(String authToken, String BaseUrl) {
             using (HttpClient client = new HttpClient()) {
@@ -29,7 +29,31 @@ namespace backend_services.HTTPUtils {
                 }
             }
         }
-        
+
+        public static String POST(object? data , String BaseUrl)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    string json = JsonConvert.SerializeObject(data);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = client.PostAsync(BaseUrl, content).Result;
+
+                    response.EnsureSuccessStatusCode(); // Lancia un'eccezione se lo stato HTTP non è 2xx
+
+                    string responseBody = response.Content.ReadAsStringAsync().Result;
+                    return responseBody;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Errore: {ex.Message}");
+                    return null;
+                }
+            }
+        }
+
         public static String POST(object? data, String authToken, String BaseUrl) {
             using (HttpClient client = new HttpClient()) {
                 try {
