@@ -30,7 +30,7 @@ namespace backend_services.BackendServices
 
         public String UpdateFolder(FolderDTO folder, String id) {
             string tmpUrl = this.BaseUrl + "/" + id;
-            string result = HTTPUtils.PUT(folder, authToken, this.BaseUrl);
+            string result = HTTPUtils.PUT(folder, authToken, tmpUrl);
             return result;
         }
 
