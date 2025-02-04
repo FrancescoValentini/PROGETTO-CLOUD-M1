@@ -27,7 +27,7 @@
                     <td>@folder.folderName</td>
                     <td>@folder.creationTimestamp</td>
                     <td>
-                        <button type="button" class="btn btn-outline-primary"><i class="bi bi-pencil-square"></i></button>
+                        <button type="button" class="btn btn-outline-primary" @onclick="(() => UpdateFolder(folder.id))"><i class="bi bi-pencil-square"></i></button>
                         <button type="button" class="btn btn-outline-danger" @onclick="(() => DeleteFolder(folder.id))"><i class="bi bi-trash"></i></button>
                     </td>
                 </tr>
@@ -39,6 +39,7 @@
 
 @code {
     private List<FolderDTO> folders = new List<FolderDTO>();
+    private FolderController backend;
     private string token;
     private string folderName;
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -53,6 +54,7 @@
             }
             else
             {
+                backend = new FolderController("http://127.0.0.1:8080/api/folders", token);
                 folders = await getFolders();
                 StateHasChanged(); // Aggiorna la Ui dopo il caricamento dei dati
             }
@@ -61,26 +63,33 @@
 
     private async Task<List<FolderDTO>> getFolders()
     {
-
-        FolderController backend = new FolderController("http://127.0.0.1:8080/api/folders", token);
         return backend.GetFolders();
     }
 
-    private void DeleteFolder(String id)
+    private async void DeleteFolder(String id)
     {
-        FolderController backend = new FolderController("http://127.0.0.1:8080/api/folders", token);
         backend.DeleteFolder(id);
+        folders = await getFolders();
     }
 
-    private void AddFolder()
+    private async void AddFolder()
     {
-        FolderController backend = new FolderController("http://127.0.0.1:8080/api/folders", token);
         FolderDTO folderDTO = new FolderDTO();
         folderDTO.folderName = folderName;
 
         backend.AddFolder(folderDTO);
+        folders = await getFolders();
     }
 
+
+    private async void UpdateFolder(string folderId)
+    {
+        FolderDTO folderDTO = new FolderDTO();
+        folderDTO.folderName = folderName;
+
+        backend.UpdateFolder(folderDTO, folderId);
+        folders = await getFolders();
+    }
 
 }
 
