@@ -1,4 +1,7 @@
 @page "/notes"
+@using backend_services.BackendServices
+@inject ICookie cookie
+@inject NavigationManager Navigation
 @using backend_services.Models
 @rendermode InteractiveServer
 <h1>Notes</h1>
@@ -47,31 +50,52 @@
 @code {
     private string noteName;
     private List<Note> NoteList = new List<Note>();
-
-    private Task UpdateNote(string Id)
+    private NoteController backend;
+    private string token;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        throw new NotImplementedException();
+        if (firstRender)
+        {
+            token = await cookie.GetValue("token");
+            if (string.IsNullOrEmpty(token))
+            {
+                // Redirect a login se il token non è presente
+                Navigation.NavigateTo("/login");
+            }
+            else
+            {
+                backend = new NoteController("http://127.0.0.1:8080/api/notes", token);
+                NoteList= await getNotes();
+                StateHasChanged(); // Aggiorna la Ui dopo il caricamento dei dati
+            }
+        }
+    }
+    private async Task<List<Note>> getNotes()
+    {
+        return backend.GetNotes();
     }
 
-    private Task DeleteNote(string Id)
+    private async void UpdateNote(string Id)
     {
-        throw new NotImplementedException();
+        NoteDTO noteDTO = new NoteDTO();
+        //aggiungere attributi al DTO
+        backend.UpdateNote(noteDTO, Id);
+        NoteList = await getNotes();
     }
 
-    private void AddNote()
+    private async void DeleteNote(string Id)
+    {
+        backend.DeleteNote(Id);
+        NoteList = await getNotes();
+    }
+
+    private async void AddNote()
     { 
-        Folder f1 = new Folder();
-        f1.Id = "sjjwn";
-        f1.FolderName = "folder1";
-        
-        Note nota1 = new Note();
-         
-        nota1.Id = "adnwi";
-        nota1.Title = "Titolo nota"; 
-        nota1.Body = "questa è una nota"; 
-        nota1.Cartella = f1;
-        nota1.Encrypted = "PLAINTEXT";
-        NoteList.Add(nota1);
+        NoteDTO noteDTO = new NoteDTO();
+        //aggiungere attributi al DTO
+        backend.AddNote(noteDTO);
+        NoteList = await getNotes();
+    
         
     }
     
