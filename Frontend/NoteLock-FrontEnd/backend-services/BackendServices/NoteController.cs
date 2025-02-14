@@ -21,14 +21,14 @@ public class NoteController
         return JsonConvert.DeserializeObject<List<NoteDTO>>(json);
     }
 
-    public String AddNote(NoteDTO folder) {
-        string result = HTTPUtils.POST(folder, authToken, this.BaseUrl);
+    public String AddNote(NoteDTO note) {
+        string result = HTTPUtils.POST(note, authToken, this.BaseUrl);
         return result;
     }
 
-    public String UpdateNote(NoteDTO folder, String id) {
+    public String UpdateNote(NoteDTO note, String id) {
         string tmpUrl = this.BaseUrl + "/" + id;
-        string result = HTTPUtils.PUT(folder, authToken, tmpUrl);
+        string result = HTTPUtils.PUT(note, authToken, tmpUrl);
         return result;
     }
 
