@@ -9,6 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents(); // <--- Aggiunto il supporto WASM
 
 builder.Services.AddScoped<ICookie, CookieUtil>();
+builder.Services.AddHttpClient<AuthController>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

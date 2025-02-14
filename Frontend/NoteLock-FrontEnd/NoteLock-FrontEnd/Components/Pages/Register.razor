@@ -1,5 +1,6 @@
 ﻿@page "/register"
 @rendermode InteractiveServer
+@inject AuthController backend
 
 
 
@@ -38,7 +39,6 @@
 
 
 @code {
-    private AuthController backend;
     private string email;
     private string password;
     private string username;
@@ -46,7 +46,7 @@
     private string surname;
     private void MethodRegister()
     {
-        backend = new AuthController("http://127.0.0.1:8080/auth/register");
+        
         RegisterDTO r = new RegisterDTO();
         r.email = email;
         r.password = password;

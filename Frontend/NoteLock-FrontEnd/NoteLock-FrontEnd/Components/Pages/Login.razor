@@ -1,6 +1,7 @@
 ﻿@page "/login"
 @rendermode InteractiveServer
 @inject ICookie cookie
+@inject AuthController backend
 
 <h1>Login</h1>
 
@@ -18,13 +19,16 @@
 
 
 @code {
-    private AuthController backend;
     private string username;
     private string password;
 
+    public Login()
+    {
+        
+    }
+
     private async Task MethodLogin()
     {
-        backend = new AuthController("http://127.0.0.1:8080/auth/login");
         LoginDTO l = new LoginDTO();
         l.username = username;
         l.password = password;
