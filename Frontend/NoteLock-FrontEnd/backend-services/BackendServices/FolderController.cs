@@ -1,5 +1,6 @@
 ﻿
 using backend_services.HTTP;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Text;
 namespace backend_services.BackendServices
@@ -10,6 +11,12 @@ namespace backend_services.BackendServices
     {
         private String BaseUrl;
         private String authToken;
+
+        public FolderController(HttpClient httpClient, IConfiguration configuration)
+        {
+            if (configuration["BackendAPI:BaseUrl"] == null) throw new ArgumentNullException("BaseUrl is not configured in appsettings.json");
+            BaseUrl = configuration["BackendAPI:BaseUrl"] + configuration["BackendAPI:Folders"];
+        }
 
         public FolderController(String BaseUrl, String authToken)
         {
