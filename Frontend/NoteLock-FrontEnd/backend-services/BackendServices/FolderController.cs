@@ -24,6 +24,11 @@ namespace backend_services.BackendServices
             this.authToken = authToken;
         }
 
+        public void SetToken(String token)
+        {
+            this.authToken = token;
+        }
+
         public List<FolderDTO> GetFolders()
         {
             string json = HTTPUtils.GET(authToken, BaseUrl);

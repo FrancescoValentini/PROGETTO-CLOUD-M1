@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject ICookie cookie
 @inject NavigationManager Navigation
+@inject FolderController backend
 @using backend_services.BackendServices;
 <h1>Folders</h1>
 
@@ -39,7 +40,6 @@
 
 @code {
     private List<FolderDTO> folders = new List<FolderDTO>();
-    private FolderController backend;
     private string token;
     private string folderName;
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -54,7 +54,7 @@
             }
             else
             {
-                backend = new FolderController("http://127.0.0.1:8080/api/folders", token);
+                backend.SetToken(token);
                 folders = await getFolders();
                 StateHasChanged(); // Aggiorna la Ui dopo il caricamento dei dati
             }

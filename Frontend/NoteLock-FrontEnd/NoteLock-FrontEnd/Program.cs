@@ -1,3 +1,4 @@
+using backend_services.BackendServices;
 using NoteLock_FrontEnd.Components;
 using System.Net;
 
@@ -10,6 +11,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped<ICookie, CookieUtil>();
 builder.Services.AddHttpClient<AuthController>();
+builder.Services.AddHttpClient<FolderController>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
