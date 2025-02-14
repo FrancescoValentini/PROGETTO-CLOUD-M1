@@ -12,6 +12,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddScoped<ICookie, CookieUtil>();
 builder.Services.AddHttpClient<AuthController>();
 builder.Services.AddHttpClient<FolderController>();
+builder.Services.AddHttpClient<NoteController>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
