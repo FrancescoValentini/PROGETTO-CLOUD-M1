@@ -1,7 +1,79 @@
 @page "/notes"
+@using backend_services.Models
 @rendermode InteractiveServer
 <h1>Notes</h1>
 
+
+
+<label for="inputNoteName" class="form-label">NoteName</label>
+
+
+<input type="text" @bind="@noteName" class="form-control" id="inputNoteName">
+
+<button type="button" class="btn btn-outline-success" @onclick="AddNote"><i class="bi bi-plus-square"></i></button>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Timestamp</th>
+        <th scope="col">Folder</th>
+        <th scope="col">Title</th>
+        <th scope="col">Body</th>
+        <th scope="col">Encrypted</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @{
+        foreach(Note note in NoteList){
+            <tr>
+                <td>@note.Timestamp</td>
+                <td>@note.Cartella.FolderName</td>
+                <td>@note.Title</td>
+                <td>@note.Body</td>
+                <td>@note.Encrypted</td>
+
+                <td>
+                    <button type="button" class="btn btn-outline-primary" @onclick="(() => UpdateNote(note.Id))"><i class="bi bi-pencil-square"></i></button>
+                    <button type="button" class="btn btn-outline-danger" @onclick="(() => DeleteNote(note.Id))"><i class="bi bi-trash"></i></button>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+
 @code {
+    private string noteName;
+    private List<Note> NoteList = new List<Note>();
+
+    private Task UpdateNote(string Id)
+    {
+        throw new NotImplementedException();
+    }
+
+    private Task DeleteNote(string Id)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void AddNote()
+    { 
+        Folder f1 = new Folder();
+        f1.Id = "sjjwn";
+        f1.FolderName = "folder1";
+        
+        Note nota1 = new Note();
+         
+        nota1.Id = "adnwi";
+        nota1.Title = "Titolo nota"; 
+        nota1.Body = "questa è una nota"; 
+        nota1.Cartella = f1;
+        nota1.Encrypted = "PLAINTEXT";
+        NoteList.Add(nota1);
+        
+    }
     
 }
+

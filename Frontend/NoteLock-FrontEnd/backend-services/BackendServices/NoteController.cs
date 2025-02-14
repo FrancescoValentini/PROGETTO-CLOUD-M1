@@ -15,10 +15,10 @@ public class NoteController
         this.authToken = authToken;
     }
 
-    public List<NoteDTO> GetNotes()
+    public List<Note> GetNotes()
     {
         string json = HTTPUtils.GET(authToken, BaseUrl);
-        return JsonConvert.DeserializeObject<List<NoteDTO>>(json);
+        return JsonConvert.DeserializeObject<List<Note>>(json);
     }
 
     public String AddNote(NoteDTO note) {
