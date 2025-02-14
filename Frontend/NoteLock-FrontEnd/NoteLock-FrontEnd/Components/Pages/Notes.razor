@@ -4,6 +4,7 @@
 @inject NavigationManager Navigation
 @using backend_services.Models
 @rendermode InteractiveServer
+@inject NoteController backend
 <h1>Notes</h1>
 
 
@@ -50,7 +51,6 @@
 @code {
     private string noteName;
     private List<Note> NoteList = new List<Note>();
-    private NoteController backend;
     private string token;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -64,7 +64,7 @@
             }
             else
             {
-                backend = new NoteController("http://127.0.0.1:8080/api/notes", token);
+                backend.SetToken(token);
                 NoteList= await getNotes();
                 StateHasChanged(); // Aggiorna la Ui dopo il caricamento dei dati
             }

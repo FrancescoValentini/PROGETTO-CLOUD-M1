@@ -1,3 +1,4 @@
+using backend_services.BackendServices;
 using NoteLock_FrontEnd.Components;
 using System.Net;
 
@@ -9,6 +10,9 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents(); // <--- Aggiunto il supporto WASM
 
 builder.Services.AddScoped<ICookie, CookieUtil>();
+builder.Services.AddHttpClient<AuthController>();
+builder.Services.AddHttpClient<FolderController>();
+builder.Services.AddHttpClient<NoteController>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

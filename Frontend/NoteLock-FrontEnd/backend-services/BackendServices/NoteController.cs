@@ -1,5 +1,6 @@
 using backend_services.HTTP;
 using backend_services.Models;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace backend_services.BackendServices;
@@ -13,6 +14,16 @@ public class NoteController
     {
         this.BaseUrl = BaseUrl;
         this.authToken = authToken;
+    }
+
+    public NoteController(HttpClient httpClient, IConfiguration configuration)
+    {
+        if(configuration["BackendAPI:BaseUrl"] == null) throw new ArgumentNullException("BaseUrl is not configured in appsettings.json");
+        BaseUrl = configuration["BackendAPI:BaseUrl"] + configuration["BackendAPI:Notes"];
+    }
+
+    public void SetToken(String token) {
+        authToken = token;
     }
 
     public List<Note> GetNotes()
