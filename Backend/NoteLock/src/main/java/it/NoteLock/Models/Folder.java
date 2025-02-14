@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,6 +21,8 @@ public class Folder {
 	private Date creationTimestamp;
 	@OneToMany(mappedBy = "cartella", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.EAGER)
 	private List<Note>notesList;
+	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "utente_id", nullable = false )
 	private UserAccount utente;

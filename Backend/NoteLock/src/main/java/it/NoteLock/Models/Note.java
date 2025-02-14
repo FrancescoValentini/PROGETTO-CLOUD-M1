@@ -1,6 +1,9 @@
 package it.NoteLock.Models;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,9 +17,13 @@ public class Note {
 	private Date timestamp;
 	private String title;
 	private String body;
+	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "utente_id", nullable = false)
 	private UserAccount utente;
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "cartella_id", nullable = false)
 	private Folder cartella;
