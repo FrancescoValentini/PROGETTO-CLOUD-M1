@@ -9,12 +9,37 @@
 
 
 
-<label for="inputNoteName" class="form-label">NoteName</label>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditorModal">
+    Nuova nota
+</button>
 
+<!-- Modal -->
+<div class="modal fade" id="EditorModal" tabindex="-1" aria-labelledby="EditorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-fullscreen-md-down modal-dialog-scrollable">
+        <div class="modal-content">
+            <!-- MODAL HEADER -->
+            <div class="modal-header">
+                <!-- TITLE BAR -->
+                <input class="form-control form-control-lg" type="text" placeholder="Note title" aria-label=".form-control-lg titleBar">
+                
+                <!-- CLOSE BUTTON -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-<input type="text" @bind="@noteName" class="form-control" id="inputNoteName">
+            <!-- MODAL BODY -->
+            <div class="modal-body">
+                <!-- TEXT EDITOR -->
+                <textarea id="textEditor"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"><i class="bi bi-pencil-square"></i> SALVA</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<button type="button" class="btn btn-outline-success" @onclick="AddNote"><i class="bi bi-plus-square"></i></button>
 
 <table class="table">
     <thead>
@@ -47,6 +72,13 @@
     </tbody>
 </table>
 
+
+<!-- MARKDOWN EDITOR -->
+
+<script>
+    var simplemde = new SimpleMDE();
+
+</script>
 
 @code {
     private string noteName;
@@ -100,4 +132,3 @@
     }
     
 }
-
