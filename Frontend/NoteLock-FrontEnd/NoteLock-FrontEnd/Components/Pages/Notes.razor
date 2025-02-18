@@ -5,51 +5,90 @@
 @using backend_services.Models
 @rendermode InteractiveServer
 @inject NoteController backend
+@inject IJSRuntime jsRuntime
 <h1>Notes</h1>
 
 
 
-<label for="inputNoteName" class="form-label">NoteName</label>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditorModal">
+    Nuova nota
+</button>
 
+<!-- Modal -->
+<div class="modal fade" id="EditorModal" tabindex="-1" aria-labelledby="EditorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-fullscreen-md-down modal-dialog-scrollable">
+        <div class="modal-content">
+            <!-- MODAL HEADER -->
+            <div class="modal-header">
+                <!-- TITLE BAR -->
+                <input id="titleBar" class="form-control form-control-lg" type="text" placeholder="Note title" aria-label=".form-control-lg titleBar">
 
-<input type="text" @bind="@noteName" class="form-control" id="inputNoteName">
+                <!-- CLOSE BUTTON -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-<button type="button" class="btn btn-outline-success" @onclick="AddNote"><i class="bi bi-plus-square"></i></button>
+            <!-- MODAL BODY -->
+            <div class="modal-body">
+                <!-- TEXT EDITOR -->
+                <textarea id="textEditor"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="(() => AddNote())">
+                    <i class="bi bi-pencil-square"></i> 
+                    SALVA
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <table class="table">
     <thead>
-    <tr>
-        <th scope="col">Timestamp</th>
-        <th scope="col">Folder</th>
-        <th scope="col">Title</th>
-        <th scope="col">Body</th>
-        <th scope="col">Encrypted</th>
-        <th scope="col">Actions</th>
-    </tr>
+        <tr>
+            <th scope="col">Timestamp</th>
+            <th scope="col">Folder</th>
+            <th scope="col">Title</th>
+            <th scope="col">Body</th>
+            <th scope="col">Encrypted</th>
+            <th scope="col">Actions</th>
+        </tr>
     </thead>
     <tbody>
-    @{
-        foreach(Note note in NoteList){
-            <tr>
-                <td>@note.Timestamp</td>
-                <td>@note.Cartella.FolderName</td>
-                <td>@note.Title</td>
-                <td>@note.Body</td>
-                <td>@note.Encrypted</td>
+        @{
+            foreach(Note note in NoteList){
+                <tr>
+                    <td>@note.Timestamp</td>
+                    <td>@note.Cartella.FolderName</td>
+                    <td>@note.Title</td>
+                    <td>@note.Body</td>
+                    <td>@note.Encrypted</td>
 
-                <td>
-                    <button type="button" class="btn btn-outline-primary" @onclick="(() => UpdateNote(note.Id))"><i class="bi bi-pencil-square"></i></button>
-                    <button type="button" class="btn btn-outline-danger" @onclick="(() => DeleteNote(note.Id))"><i class="bi bi-trash"></i></button>
-                </td>
-            </tr>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary" @onclick="(() => ViewNote(note.Id))"><i class="bi bi-pencil-square"></i></button>
+                        <button type="button" class="btn btn-outline-danger" @onclick="(() => DeleteNote(note.Id))"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+            }
         }
-    }
     </tbody>
 </table>
 
 
+<!-- MARKDOWN EDITOR -->
+
+<script>
+    var simplemde = new SimpleMDE();
+
+
+
+</script>
+
 @code {
     private string noteName;
+    private Note Nota = null;
     private List<Note> NoteList = new List<Note>();
     private string token;
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -89,15 +128,54 @@
         NoteList = await getNotes();
     }
 
-    private async void AddNote()
-    { 
-        NoteDTO noteDTO = new NoteDTO();
-        //aggiungere attributi al DTO
-        backend.AddNote(noteDTO);
-        NoteList = await getNotes();
-    
-        
-    }
-    
-}
+    private async Task AddNote()
+    {
+        NoteDTO note = await BuildNote();
 
+        if(this.Nota == null){
+            
+            backend.AddNote(note);
+            Console.WriteLine("NUOVA NOTA");
+
+        }else{
+            backend.UpdateNote(note, this.Nota.Id);
+            Console.WriteLine("UPDATE");
+
+        }
+
+
+        NoteList = await getNotes();
+        this.Nota = null;
+    }
+
+
+
+
+    private async Task<NoteDTO> BuildNote()
+    {
+        // Esegui il codice JavaScript in modo sicuro e recupera il valore del titolo
+        string Title = await jsRuntime.InvokeAsync<string>("eval", new object[] { "document.getElementById('titleBar').value" });
+        string noteBody = await jsRuntime.InvokeAsync<string>("eval", new object[] { "simplemde.value()" });
+
+        NoteDTO note = new NoteDTO();
+        note.subject = Title;
+        note.body = noteBody;
+        note.folderId = "02464980-2f22-4bf1-b01e-d0ce143528fb";
+        note.encrypted = "PLAINTEXT";
+
+        return note;
+    }
+
+    private async void ViewNote(string noteID){
+        Note note = backend.GetNote(noteID);
+        string Title = note.Title;
+        string Body = note.Body;
+
+        this.Nota = note;
+
+        await jsRuntime.InvokeVoidAsync("eval", $"new bootstrap.Modal(document.getElementById('EditorModal')).show()");
+        await jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('titleBar').value = '{Title}'");
+        await jsRuntime.InvokeVoidAsync("eval", $"simplemde.value('{Body}')");
+    }
+
+}
