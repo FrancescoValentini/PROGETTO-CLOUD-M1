@@ -173,6 +173,7 @@
 
         this.Nota = note;
 
+        await jsRuntime.InvokeVoidAsync("eval", $"new bootstrap.Modal(document.getElementById('EditorModal')).show()");
         await jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('titleBar').value = '{Title}'");
         await jsRuntime.InvokeVoidAsync("eval", $"simplemde.value('{Body}')");
     }
