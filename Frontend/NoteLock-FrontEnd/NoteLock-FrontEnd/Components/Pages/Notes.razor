@@ -30,7 +30,7 @@
                             <input id="titleBar" class="form-control form-control-lg" type="text" placeholder="Note title" aria-label=".form-control-lg titleBar">
                         </div>
                         <div class="row">
-                            <select class="form-select" aria-label="Default select example">
+                            <select class="form-select" aria-label="Default select example" @onchange="OnFolderChange">
                                 @{
                                     foreach(FolderDTO folder in FoldersList){
                                         <option value="@folder.id">@folder.folderName</option>
@@ -109,6 +109,7 @@
     private Note Nota = null;
     private List<Note> NoteList = new List<Note>();
     private string token;
+    private string tmp_folderId;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -153,7 +154,7 @@
         NoteDTO note = await BuildNote();
 
         if(this.Nota == null){
-            
+
             backend.AddNote(note);
             Console.WriteLine("NUOVA NOTA");
 
@@ -167,7 +168,7 @@
         NoteList = await getNotes();
         this.Nota = null;
     }
-    
+
     private async Task<List<FolderDTO>> getFolders()
     {
         return backend_f.GetFolders();
@@ -184,9 +185,8 @@
         NoteDTO note = new NoteDTO();
         note.subject = Title;
         note.body = noteBody;
-        note.folderId = "02464980-2f22-4bf1-b01e-d0ce143528fb";
+        note.folderId = tmp_folderId;
         note.encrypted = "PLAINTEXT";
-
         return note;
     }
 
@@ -200,6 +200,12 @@
         await jsRuntime.InvokeVoidAsync("eval", $"new bootstrap.Modal(document.getElementById('EditorModal')).show()");
         await jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('titleBar').value = '{Title}'");
         await jsRuntime.InvokeVoidAsync("eval", $"simplemde.value('{Body}')");
+    }
+
+    private void OnFolderChange(ChangeEventArgs e)
+    {
+        tmp_folderId = e.Value.ToString();
+        Console.WriteLine(tmp_folderId);
     }
 
 }
