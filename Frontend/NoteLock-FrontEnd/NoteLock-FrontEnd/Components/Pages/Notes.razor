@@ -6,6 +6,7 @@
 @rendermode InteractiveServer
 @inject NoteController backend
 @inject IJSRuntime jsRuntime
+@inject FolderController backend_f
 <h1>Notes</h1>
 
 
@@ -22,8 +23,24 @@
             <!-- MODAL HEADER -->
             <div class="modal-header">
                 <!-- TITLE BAR -->
-                <input id="titleBar" class="form-control form-control-lg" type="text" placeholder="Note title" aria-label=".form-control-lg titleBar">
-
+               
+                <div class="container text-center">
+                    <div class="col">
+                        <div class="row">
+                            <input id="titleBar" class="form-control form-control-lg" type="text" placeholder="Note title" aria-label=".form-control-lg titleBar">
+                        </div>
+                        <div class="row">
+                            <select class="form-select" aria-label="Default select example">
+                                @{
+                                    foreach(FolderDTO folder in FoldersList){
+                                        <option value="@folder.id">@folder.folderName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>    
+                
                 <!-- CLOSE BUTTON -->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -87,6 +104,7 @@
 </script>
 
 @code {
+    private List<FolderDTO> FoldersList = new List<FolderDTO>();
     private string noteName;
     private Note Nota = null;
     private List<Note> NoteList = new List<Note>();
@@ -104,7 +122,9 @@
             else
             {
                 backend.SetToken(token);
+                backend_f.SetToken(token);
                 NoteList= await getNotes();
+                FoldersList= await getFolders();
                 StateHasChanged(); // Aggiorna la Ui dopo il caricamento dei dati
             }
         }
@@ -147,7 +167,11 @@
         NoteList = await getNotes();
         this.Nota = null;
     }
-
+    
+    private async Task<List<FolderDTO>> getFolders()
+    {
+        return backend_f.GetFolders();
+    }
 
 
 
