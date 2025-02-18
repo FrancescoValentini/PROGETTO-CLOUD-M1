@@ -5,6 +5,7 @@
 @using backend_services.Models
 @rendermode InteractiveServer
 @inject NoteController backend
+@inject IJSRuntime jsRuntime
 <h1>Notes</h1>
 
 
@@ -21,8 +22,8 @@
             <!-- MODAL HEADER -->
             <div class="modal-header">
                 <!-- TITLE BAR -->
-                <input class="form-control form-control-lg" type="text" placeholder="Note title" aria-label=".form-control-lg titleBar">
-                
+                <input id="titleBar" class="form-control form-control-lg" type="text" placeholder="Note title" aria-label=".form-control-lg titleBar">
+
                 <!-- CLOSE BUTTON -->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -34,7 +35,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary"><i class="bi bi-pencil-square"></i> SALVA</button>
+                <button type="button" class="btn btn-primary" @onclick="(() => AddNote())">
+                    <i class="bi bi-pencil-square"></i> 
+                    SALVA
+                </button>
             </div>
         </div>
     </div>
@@ -43,32 +47,32 @@
 
 <table class="table">
     <thead>
-    <tr>
-        <th scope="col">Timestamp</th>
-        <th scope="col">Folder</th>
-        <th scope="col">Title</th>
-        <th scope="col">Body</th>
-        <th scope="col">Encrypted</th>
-        <th scope="col">Actions</th>
-    </tr>
+        <tr>
+            <th scope="col">Timestamp</th>
+            <th scope="col">Folder</th>
+            <th scope="col">Title</th>
+            <th scope="col">Body</th>
+            <th scope="col">Encrypted</th>
+            <th scope="col">Actions</th>
+        </tr>
     </thead>
     <tbody>
-    @{
-        foreach(Note note in NoteList){
-            <tr>
-                <td>@note.Timestamp</td>
-                <td>@note.Cartella.FolderName</td>
-                <td>@note.Title</td>
-                <td>@note.Body</td>
-                <td>@note.Encrypted</td>
+        @{
+            foreach(Note note in NoteList){
+                <tr>
+                    <td>@note.Timestamp</td>
+                    <td>@note.Cartella.FolderName</td>
+                    <td>@note.Title</td>
+                    <td>@note.Body</td>
+                    <td>@note.Encrypted</td>
 
-                <td>
-                    <button type="button" class="btn btn-outline-primary" @onclick="(() => UpdateNote(note.Id))"><i class="bi bi-pencil-square"></i></button>
-                    <button type="button" class="btn btn-outline-danger" @onclick="(() => DeleteNote(note.Id))"><i class="bi bi-trash"></i></button>
-                </td>
-            </tr>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary" @onclick="(() => UpdateNote(note.Id))"><i class="bi bi-pencil-square"></i></button>
+                        <button type="button" class="btn btn-outline-danger" @onclick="(() => DeleteNote(note.Id))"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+            }
         }
-    }
     </tbody>
 </table>
 
@@ -77,6 +81,8 @@
 
 <script>
     var simplemde = new SimpleMDE();
+
+
 
 </script>
 
@@ -121,14 +127,32 @@
         NoteList = await getNotes();
     }
 
-    private async void AddNote()
-    { 
-        NoteDTO noteDTO = new NoteDTO();
-        //aggiungere attributi al DTO
-        backend.AddNote(noteDTO);
+    private async Task AddNote()
+    {
+        NoteDTO note = await BuildNote();
+        backend.AddNote(note);
         NoteList = await getNotes();
-    
-        
     }
-    
+
+
+    private async Task<NoteDTO> BuildNote()
+    {
+        // Esegui il codice JavaScript in modo sicuro e recupera il valore del titolo
+        string Title = await jsRuntime.InvokeAsync<string>("eval", new object[] { "document.getElementById('titleBar').value" });
+        string noteBody = await jsRuntime.InvokeAsync<string>("eval", new object[] { "simplemde.value()" });
+
+        NoteDTO note = new NoteDTO();
+        note.subject = Title;
+        note.body = noteBody;
+        note.folderId = "02464980-2f22-4bf1-b01e-d0ce143528fb";
+        note.encrypted = "PLAINTEXT";
+
+        return note;
+    }
+
+
+
+
+
+
 }

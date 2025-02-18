@@ -2,6 +2,7 @@ package it.NoteLock.DTO;
 
 import it.NoteLock.Models.EncryptionOptions;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class NoteDTO {
 	
@@ -12,7 +13,7 @@ public class NoteDTO {
 	@NotBlank(message = "Identificativo della cartella obbligatorio")
 	private String folderId;
 	
-	@NotBlank(message = "Opzioni di cifratura obbligatorie")
+	@NotNull(message = "Opzioni di cifratura obbligatorie")
 	private EncryptionOptions encrypted;
 
 	public NoteDTO() {
