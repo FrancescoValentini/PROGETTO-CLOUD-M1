@@ -32,6 +32,11 @@ public class NoteController
         return JsonConvert.DeserializeObject<List<Note>>(json);
     }
 
+    public Note GetNote(string noteID) {
+        string json = HTTPUtils.GET(authToken, BaseUrl + "/" + noteID);
+        return JsonConvert.DeserializeObject<Note>(json);
+    }
+
     public String AddNote(NoteDTO note) {
         string result = HTTPUtils.POST(note, authToken, this.BaseUrl);
         return result;
@@ -40,6 +45,9 @@ public class NoteController
     public String UpdateNote(NoteDTO note, String id) {
         string tmpUrl = this.BaseUrl + "/" + id;
         string result = HTTPUtils.PUT(note, authToken, tmpUrl);
+        Console.WriteLine(id);
+        Console.WriteLine(note.subject);
+        Console.WriteLine(tmpUrl);
         return result;
     }
 

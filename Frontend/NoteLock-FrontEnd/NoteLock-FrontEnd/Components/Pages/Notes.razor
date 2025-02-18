@@ -67,7 +67,7 @@
                     <td>@note.Encrypted</td>
 
                     <td>
-                        <button type="button" class="btn btn-outline-primary" @onclick="(() => UpdateNote(note.Id))"><i class="bi bi-pencil-square"></i></button>
+                        <button type="button" class="btn btn-outline-primary" @onclick="(() => ViewNote(note.Id))"><i class="bi bi-pencil-square"></i></button>
                         <button type="button" class="btn btn-outline-danger" @onclick="(() => DeleteNote(note.Id))"><i class="bi bi-trash"></i></button>
                     </td>
                 </tr>
@@ -88,6 +88,7 @@
 
 @code {
     private string noteName;
+    private Note Nota = null;
     private List<Note> NoteList = new List<Note>();
     private string token;
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -130,9 +131,24 @@
     private async Task AddNote()
     {
         NoteDTO note = await BuildNote();
-        backend.AddNote(note);
+
+        if(this.Nota == null){
+            
+            backend.AddNote(note);
+            Console.WriteLine("NUOVA NOTA");
+
+        }else{
+            backend.UpdateNote(note, this.Nota.Id);
+            Console.WriteLine("UPDATE");
+
+        }
+
+
         NoteList = await getNotes();
+        this.Nota = null;
     }
+
+
 
 
     private async Task<NoteDTO> BuildNote()
@@ -150,9 +166,15 @@
         return note;
     }
 
+    private async void ViewNote(string noteID){
+        Note note = backend.GetNote(noteID);
+        string Title = note.Title;
+        string Body = note.Body;
 
+        this.Nota = note;
 
-
-
+        await jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('titleBar').value = '{Title}'");
+        await jsRuntime.InvokeVoidAsync("eval", $"simplemde.value('{Body}')");
+    }
 
 }
