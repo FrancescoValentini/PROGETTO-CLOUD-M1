@@ -32,7 +32,7 @@
                         <div class="row">
                             <select class="form-select" aria-label="Default select example">
                                 @{
-                                    foreach(FolderDTO folder in folders){
+                                    foreach(FolderDTO folder in FoldersList){
                                         <option value="@folder.id">@folder.folderName</option>
                                     }
                                 }
@@ -104,7 +104,7 @@
 </script>
 
 @code {
-    private List<FolderDTO> folders = new List<FolderDTO>();
+    private List<FolderDTO> FoldersList = new List<FolderDTO>();
     private string noteName;
     private Note Nota = null;
     private List<Note> NoteList = new List<Note>();
@@ -123,6 +123,7 @@
             {
                 backend.SetToken(token);
                 NoteList= await getNotes();
+                FoldersList= await getFolders();
                 StateHasChanged(); // Aggiorna la Ui dopo il caricamento dei dati
             }
         }
