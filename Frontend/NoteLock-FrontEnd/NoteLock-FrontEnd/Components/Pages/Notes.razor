@@ -30,7 +30,8 @@
                             <input id="titleBar" class="form-control form-control-lg" type="text" placeholder="Note title" aria-label=".form-control-lg titleBar">
                         </div>
                         <div class="row">
-                            <select class="form-select" aria-label="Default select example" @onchange="OnFolderChange">
+                            <select class="form-select" @onchange="OnFolderChange">
+                                <option value="" disabled selected>Select your option</option>
                                 @{
                                     foreach(FolderDTO folder in FoldersList){
                                         <option value="@folder.id">@folder.folderName</option>
