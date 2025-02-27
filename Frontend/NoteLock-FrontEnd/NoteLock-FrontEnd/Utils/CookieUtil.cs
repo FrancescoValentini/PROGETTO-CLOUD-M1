@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using Newtonsoft.Json.Linq;
 
 public interface ICookie
 {
@@ -22,6 +23,10 @@ public interface ICookie
         {
             var curExp = (days != null) ? (days > 0 ? DateToUTC(days.Value) : "") : expires;
             await SetCookie($"{key}={value}; expires={curExp}; path=/");
+        }
+
+        public async Task DeleteCookie(string key) {
+            await SetCookie($"{key}=;");
         }
 
         public async Task<string> GetValue(string key, string def = "")
