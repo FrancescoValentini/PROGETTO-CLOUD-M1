@@ -95,13 +95,7 @@
 
 
 <!-- MARKDOWN EDITOR -->
-
-<script>
-    var simplemde = new SimpleMDE();
-
-
-
-</script>
+<script src="js/Editor.js"></script>
 
 @code {
     private List<FolderDTO> FoldersList = new List<FolderDTO>();
@@ -179,8 +173,8 @@
     private async Task<NoteDTO> BuildNote()
     {
         // Esegui il codice JavaScript in modo sicuro e recupera il valore del titolo
-        string Title = await jsRuntime.InvokeAsync<string>("eval", new object[] { "document.getElementById('titleBar').value" });
-        string noteBody = await jsRuntime.InvokeAsync<string>("eval", new object[] { "simplemde.value()" });
+        string Title = await jsRuntime.InvokeAsync<string>("getTitleText");
+        string noteBody = await jsRuntime.InvokeAsync<string>("getNoteText");
 
         NoteDTO note = new NoteDTO();
         note.subject = Title;
@@ -197,9 +191,9 @@
 
         this.Nota = note;
 
-        await jsRuntime.InvokeVoidAsync("eval", $"new bootstrap.Modal(document.getElementById('EditorModal')).show()");
-        await jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('titleBar').value = '{Title}'");
-        await jsRuntime.InvokeVoidAsync("eval", $"simplemde.value('{Body}')");
+        await jsRuntime.InvokeVoidAsync("showEditorModal");
+        await jsRuntime.InvokeVoidAsync("setTitleText", $"{Title}");
+        await jsRuntime.InvokeVoidAsync("setBodyText", $"{Body}");
     }
 
     private void OnFolderChange(ChangeEventArgs e)
