@@ -13,6 +13,7 @@ builder.Services.AddScoped<ICookie, CookieUtil>();
 builder.Services.AddHttpClient<AuthController>();
 builder.Services.AddHttpClient<FolderController>();
 builder.Services.AddHttpClient<NoteController>();
+builder.Services.AddHttpClient<WhoamiController>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

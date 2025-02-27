@@ -1,0 +1,87 @@
+﻿@page "/whoami"
+@using backend_services.Models
+@using backend_services.BackendServices
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject ICookie cookie
+@inject WhoamiController backend
+<h3>Whoami</h3>
+
+
+
+
+@if(user != null)
+{
+    <div class="row align-items-center">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Campo</th>
+                        <th scope="col">Descrizione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">ID</th>
+                        <td>@user.Id</td>
+
+
+                    </tr>
+                    <tr>
+                        <th scope="row">Username</th>
+                        <td>@user.Username</td>
+
+                    </tr>
+                    <tr>
+                        <th scope="row">Nome</th>
+                        <td>@user.Nome</td>
+
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Cognome</th>
+                        <td>@user.Cognome</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email</th>
+                        <td>@user.Email</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Ruolo</th>
+                        <td>@user.Authorities.ToArray()[0].authority</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+           
+        </div>
+        <div class="col">
+        </div>
+    </div>
+
+}
+
+@code {
+    String token;
+    UserAccount user = null;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            token = await cookie.GetValue("token");
+            if (string.IsNullOrEmpty(token))
+            {
+                // Redirect a login se il token non è presente
+                Navigation.NavigateTo("/login");
+            }
+            else
+            {
+                user = backend.Whoami(token);
+                StateHasChanged(); // Aggiorna la Ui dopo il caricamento dei dati
+            }
+        }
+    }
+}
