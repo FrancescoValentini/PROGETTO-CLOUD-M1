@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject ICookie cookie
 @inject AuthController backend
+@inject NavigationManager Navigation
 
 <h1>Login</h1>
 
@@ -35,6 +36,7 @@
         String token = backend.Login(l);
   
         cookie.SetValue("token", token, 30);
+        Navigation.NavigateTo("/notes");
 
     }
 }

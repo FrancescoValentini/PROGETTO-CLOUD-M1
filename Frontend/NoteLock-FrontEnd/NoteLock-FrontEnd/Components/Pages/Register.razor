@@ -1,6 +1,7 @@
 ﻿@page "/register"
 @rendermode InteractiveServer
 @inject AuthController backend
+@inject NavigationManager Navigation
 
 
 
@@ -54,6 +55,7 @@
         r.nome = name;
         r.cognome = surname;
         backend.Register(r);
+        Navigation.NavigateTo("/login");
     }
 
 }
