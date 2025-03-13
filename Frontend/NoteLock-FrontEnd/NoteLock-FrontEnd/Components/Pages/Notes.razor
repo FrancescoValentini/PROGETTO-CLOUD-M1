@@ -23,7 +23,7 @@
             <!-- MODAL HEADER -->
             <div class="modal-header">
                 <!-- TITLE BAR -->
-               
+
                 <div class="container text-center">
                     <div class="col">
                         <div class="row">
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 </div>    
-                
+
                 <!-- CLOSE BUTTON -->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -53,9 +53,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" @onclick="(() => AddNote())">
+                <button type="button" class="btn btn-primary" @onclick="(() => AddNote(EnumEncrypted.PLAINTEXT))">
                     <i class="bi bi-pencil-square"></i> 
                     SALVA
+                </button>
+                <button type="button" class="btn btn-primary" @onclick="(() => AddNote(EnumEncrypted.ENCRYPTED))">
+                    <i class="bi bi-lock"></i>
+                    SALVA E PROTEGGI
                 </button>
             </div>
         </div>
@@ -144,9 +148,9 @@
         NoteList = await getNotes();
     }
 
-    private async Task AddNote()
+    private async Task AddNote(EnumEncrypted encrypted)
     {
-        NoteDTO note = await BuildNote();
+        NoteDTO note = await BuildNote(encrypted);
 
         if(this.Nota == null){
 
@@ -171,7 +175,7 @@
 
 
 
-    private async Task<NoteDTO> BuildNote()
+    private async Task<NoteDTO> BuildNote(EnumEncrypted encrypted)
     {
         // Esegui il codice JavaScript in modo sicuro e recupera il valore del titolo
         string Title = await jsRuntime.InvokeAsync<string>("getTitleText");
@@ -181,7 +185,15 @@
         note.subject = Title;
         note.body = noteBody;
         note.folderId = tmp_folderId;
-        note.encrypted = "PLAINTEXT";
+
+        if(encrypted == EnumEncrypted.PLAINTEXT)
+        {
+            note.encrypted = "PLAINTEXT";
+        }
+        else
+        {
+            note.encrypted = "SYM_AES256_GCM";
+        }
         return note;
     }
 
