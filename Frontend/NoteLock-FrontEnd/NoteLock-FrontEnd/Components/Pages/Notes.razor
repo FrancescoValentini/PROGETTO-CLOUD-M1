@@ -158,6 +158,8 @@
             Console.WriteLine("NUOVA NOTA");
 
         }else{
+            Note n = backend.GetNote(this.Nota.Id);
+            note.encrypted = n.Encrypted;
             backend.UpdateNote(note, this.Nota.Id);
             Console.WriteLine("UPDATE");
 
