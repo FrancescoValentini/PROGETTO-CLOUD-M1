@@ -19,3 +19,24 @@ function setTitleText(text) {
 function setBodyText(text) {
     simplemde.value(text);
 }
+
+function encryptNote(){
+    var text = getNoteText();
+    var password = prompt("Insert password:");
+    var encrypted = "";
+    (async () => {
+        encrypted = await encrypt(password, text);
+    })();
+    return encrypted;
+}
+
+
+function decryptNote(ciphertext){
+    var password = prompt("Insert password:");
+    var decrypted = "";
+    (async () => {
+        decrypted = await decrypt(password, ciphertext);
+    })();
+    setBodyText(decrypted);
+    return decrypted;
+}
