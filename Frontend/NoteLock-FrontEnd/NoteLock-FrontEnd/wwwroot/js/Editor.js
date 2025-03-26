@@ -48,7 +48,6 @@ async function decryptNote(ciphertext) {
     try {
         let decrypted = await decrypt(password, ciphertext);
         setBodyText(decrypted);
-        console.log("Decifrato: " + decrypted);
         return decrypted;
     } catch (error) {
         console.error("Errore durante la decrittazione:", error);

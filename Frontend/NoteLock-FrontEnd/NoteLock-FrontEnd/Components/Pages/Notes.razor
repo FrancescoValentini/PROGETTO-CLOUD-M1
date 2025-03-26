@@ -187,7 +187,7 @@
 
         NoteDTO note = new NoteDTO();
         note.subject = Title;
-       
+
         note.folderId = tmp_folderId;
 
         if(encrypted == EnumEncrypted.PLAINTEXT)
@@ -212,7 +212,15 @@
 
         await jsRuntime.InvokeVoidAsync("showEditorModal");
         await jsRuntime.InvokeVoidAsync("setTitleText", $"{Title}");
-        await jsRuntime.InvokeVoidAsync("setBodyText", $"{Body}");
+
+        if (note.Encrypted.Equals("SYM_AES256_GCM"))
+        {
+            await jsRuntime.InvokeVoidAsync("decryptNote", $"{Body}");
+        }
+        else
+        {
+            await jsRuntime.InvokeVoidAsync("setBodyText", $"{Body}");
+        }
     }
 
     private void OnFolderChange(ChangeEventArgs e)
