@@ -20,23 +20,37 @@ function setBodyText(text) {
     simplemde.value(text);
 }
 
-function encryptNote(){
+async function encryptNote() {
     var text = getNoteText();
+
     var password = prompt("Insert password:");
-    var encrypted = "";
-    (async () => {
-        encrypted = await encrypt(password, text);
-    })();
-    return encrypted;
+    if (!password) {
+        return null;
+    }
+
+    try {
+        let encrypted = await encrypt(password, text);
+        return encrypted;
+    } catch (error) {
+        console.error("Errore durante la crittografia:", error);    
+        return null;
+    }
 }
 
 
-function decryptNote(ciphertext){
+
+async function decryptNote(ciphertext) {
     var password = prompt("Insert password:");
-    var decrypted = "";
-    (async () => {
-        decrypted = await decrypt(password, ciphertext);
-    })();
-    setBodyText(decrypted);
-    return decrypted;
+    if (!password) {
+        return null;
+    }
+
+    try {
+        let decrypted = await decrypt(password, ciphertext);
+        setBodyText(decrypted);
+        return decrypted;
+    } catch (error) {
+        console.error("Errore durante la decrittazione:", error);
+        return null;
+    }
 }
