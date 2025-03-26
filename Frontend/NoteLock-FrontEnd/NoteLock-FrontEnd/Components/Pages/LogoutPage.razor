@@ -10,9 +10,7 @@
 {
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        tokenService.RemoveToken();
+        await tokenService.RemoveToken();
         Navigation.NavigateTo("/login");
-
-        Console.WriteLine("ok logout");
     }
 }
