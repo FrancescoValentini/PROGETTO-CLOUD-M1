@@ -1,6 +1,7 @@
 ﻿@page "/logout"
+@using NoteLock_FrontEnd.Utils
 @rendermode InteractiveServer
-@inject ICookie cookie
+@inject TokenService tokenService
 @inject NavigationManager Navigation
 
 <h3>LogoutPage</h3>
@@ -9,7 +10,7 @@
 {
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        cookie.SetValue("token", "");
+        tokenService.RemoveToken();
         Navigation.NavigateTo("/login");
 
         Console.WriteLine("ok logout");
