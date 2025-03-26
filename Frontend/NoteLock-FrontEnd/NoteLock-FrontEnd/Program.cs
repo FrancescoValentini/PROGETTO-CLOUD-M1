@@ -1,6 +1,7 @@
 using backend_services.BackendServices;
 using NoteLock_FrontEnd.Components;
 using System.Net;
+using NoteLock_FrontEnd.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents(); // <--- Aggiunto il supporto WASM
 
+builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<ICookie, CookieUtil>();
 builder.Services.AddHttpClient<AuthController>();
 builder.Services.AddHttpClient<FolderController>();
