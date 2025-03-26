@@ -185,16 +185,18 @@
 
         NoteDTO note = new NoteDTO();
         note.subject = Title;
-        note.body = noteBody;
+       
         note.folderId = tmp_folderId;
 
         if(encrypted == EnumEncrypted.PLAINTEXT)
         {
             note.encrypted = "PLAINTEXT";
+            note.body = noteBody;
         }
         else
         {
             note.encrypted = "SYM_AES256_GCM";
+            note.body = await jsRuntime.InvokeAsync<string>("encryptNote");
         }
         return note;
     }
