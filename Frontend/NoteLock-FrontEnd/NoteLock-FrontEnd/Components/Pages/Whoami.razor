@@ -1,9 +1,10 @@
 ﻿@page "/whoami"
+@using NoteLock_FrontEnd.Utils
 @using backend_services.Models
 @using backend_services.BackendServices
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
-@inject ICookie cookie
+@inject TokenService tokenService
 @inject WhoamiController backend
 <h3>Whoami</h3>
 
@@ -71,7 +72,7 @@
     {
         if (firstRender)
         {
-            token = await cookie.GetValue("token");
+            token = await tokenService.GetToken();
             if (string.IsNullOrEmpty(token))
             {
                 // Redirect a login se il token non è presente

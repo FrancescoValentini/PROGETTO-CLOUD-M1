@@ -11,7 +11,6 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents(); // <--- Aggiunto il supporto WASM
 
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<ICookie, CookieUtil>();
 builder.Services.AddHttpClient<AuthController>();
 builder.Services.AddHttpClient<FolderController>();
 builder.Services.AddHttpClient<NoteController>();
