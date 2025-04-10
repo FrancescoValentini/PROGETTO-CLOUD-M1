@@ -1,4 +1,5 @@
 start mvnw clean package -DskipTests
+pause
 mkdir notelock-be-docker
 mkdir notelock-be-docker\target
 
