@@ -8,7 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import io.jsonwebtoken.lang.Arrays;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,6 +24,8 @@ public class UserAccount implements UserDetails{
 	private String cognome;
 	private String username;
 	private String email;
+	
+	@JsonIgnore
 	private String password;
 	@OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.EAGER)
 	private List<Folder> cartelle;
