@@ -5,6 +5,8 @@ using NoteLock_FrontEnd.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var allowedOrigins = "_customAllowedOrigins";
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
@@ -15,6 +17,14 @@ builder.Services.AddHttpClient<AuthController>();
 builder.Services.AddHttpClient<FolderController>();
 builder.Services.AddHttpClient<NoteController>();
 builder.Services.AddHttpClient<WhoamiController>();
+
+builder.Services.AddCors(options => {
+    options.AddPolicy(name: allowedOrigins,
+                      policy => {
+                          policy.WithOrigins("http://127.0.0.1");
+                      });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
